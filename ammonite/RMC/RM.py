@@ -28,7 +28,7 @@ def RM(series, eps, m, delay, invert_time_axis = False):
     #time delay is currently assumed as 1
     if invert_time_axis == True:
         values = np.flip(values) #Flip to have time axis moving forward (B.P. units)
-        time_axis = np.flip(time_axis])
+        time_axis = np.flip(time_axis)
         
     embedded_series = []
 
