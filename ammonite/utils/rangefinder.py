@@ -1,6 +1,6 @@
 import numpy as np
 
-def eps_rangefinder(eps, hitrate, target_hitrate, tolerance, num_processes, amp = 15):
+def rangefinder(eps, hitrate, target_hitrate, tolerance, num_processes, amp = 15):
     
     if hitrate < (target_hitrate - tolerance):
         

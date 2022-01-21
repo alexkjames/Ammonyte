@@ -1,11 +1,36 @@
 import pyleoclim as pyleo
-from RM import RM
-from utils import eps_rangefinder
 import multiprocessing as mp
 import numpy as np
 
+from ammonite.RMC.RM import RM
+from ammonite.utils.rangefinder import rangefinder
+
 def RM_search(series, eps, m, delay ,target_hitrate, tolerance,invert_time_axis = False, initial_hitrate = None, 
               num_processes = mp.cpu_count()):
+    '''Tool to find epsilon value tuned for specific target hitrate in recurrence matrix
+    
+    Parameters
+    ----------
+    
+    series : pyleoclim.series object (pandas.series support incoming)
+        Timeseries used to create recurrence matrix
+    eps : float
+        Starting epsilon value (best guess)
+    m : int
+        Embedding parameter for recurrence matrix
+    delay : int
+        Delay parameter for time embedding
+    target_hitrate : float
+        Desired recurrence matrix hitrate
+    tolerance : float
+        Amount of allowable difference between target hitrate and actual hitrate
+    invert_time_axis : bool
+        Whether or not to invert the time axis of the series being passed
+    initial_hitrate : float
+        If you've already calculated the initial hitrate for your settings you can pass it here to save computation time
+    num_process : int
+        Number of processes to run, automatically set to your cpu count
+    '''
     
     if initial_hitrate == None:
         print(f'Finding initial hitrate from given epsilon value: {eps}')
@@ -25,7 +50,7 @@ def RM_search(series, eps, m, delay ,target_hitrate, tolerance,invert_time_axis 
 
         with mp.Pool(num_processes) as pool:
             
-            eps_range, flag = eps_rangefinder(eps,hitrate,target_hitrate,tolerance,num_processes)
+            eps_range, flag = rangefinder(eps,hitrate,target_hitrate,tolerance,num_processes)
             
             if flag == False:
                 

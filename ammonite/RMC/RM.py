@@ -2,14 +2,33 @@ import pyleoclim as pyleo
 import numpy as np
     
 def RM(series, eps, m, delay, invert_time_axis = False):
-
-    #time delay is currently assumed as 1
-    if invert_time_axis == True:
-        values = np.flip(series.value) #Flip to have time axis moving forward (B.P. units)
-        time_axis = np.flip(series.time[m*delay:])
-    elif invert_time_axis == False:
+    '''Function to calculate recurrence matrix from pyleoclim or pandas series
+    
+    Parameters
+    ----------
+    
+    series : pyleoclim.Series or pandas.Series
+        Timeseries from which the recurrence matrix will be calculated
+    eps : int
+        Epsilon value for calculation of the matrix
+    m : int
+        Embedding parameter
+    delay : int
+        Delay parameter for time embedding
+    invert_time_axis : bool
+        Whether or not to invert the time axis of your input
+    '''
+    
+    if type(series) == 'pyleoclim.core.ui.Series':
         values = series.value
         time_axis = series.time[m*delay:]
+    elif type(series) == 'pandas.core.series.Series':
+        values = series.values
+        time_axis = list(series.index)[m*delay:]
+    #time delay is currently assumed as 1
+    if invert_time_axis == True:
+        values = np.flip(values) #Flip to have time axis moving forward (B.P. units)
+        time_axis = np.flip(time_axis])
         
     embedded_series = []
 
