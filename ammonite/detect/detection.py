@@ -4,7 +4,7 @@ import scipy as sp
 from ammonite.RMC.RM import RM
 from ammonite.fisher.fisher import FI
 
-def detect_change(series, eps, m, delay, w_size, w_incre, invert_time_axis = False):
+def detect_regime_change(series, eps, m, delay, w_size, w_incre, invert_time_axis = False):
     '''Function to run regime change detection workflow
     
     Parameters
@@ -52,6 +52,6 @@ def detect_change(series, eps, m, delay, w_size, w_incre, invert_time_axis = Fal
     for idx, i in enumerate(time_axis):
         eig_data.append([i,eigvec[idx,1],eigvec[idx,2],eigvec[idx,3],eigvec[idx,4]])
         
-    fisher_info = FI(eig_data,w_size,w_incre)
+    FI_series = FI(eig_data,w_size,w_incre)
     
-    return fisher_info
+    return FI_series

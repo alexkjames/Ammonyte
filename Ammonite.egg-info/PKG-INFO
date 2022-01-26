@@ -6,8 +6,11 @@ Home-page: https://github.com/alexkjames/Ammonite
 Author: Alexander James
 Author-email: akjames@usc.edu
 License: GPL-3.0 License
-Description: # Ammonite
 Keywords: Paleoclimate, Data Analysis, Nonlinear
 Platform: UNKNOWN
 Requires-Python: >=3.8.0
 Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Ammonite
+

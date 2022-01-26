@@ -2,12 +2,15 @@
 """
 N. Ahmad, S. Derrible, T. Eason, and H. Cabezas, 2016, “Using Fisher information to track stability in multivariate systems”,
 Royal Society Open Science, 3:160582, DOI: 10.1098/rsos.160582
+
+Edits have been made by Alexander James to streamline the code for usage in this package
 """
 
 import csv
 import pandas as pd 
 import math
 import numpy as np
+import pyleoclim as pyleo
 
 def FI(eig_data,w_size,w_incre):
     Data_num=[]
@@ -99,13 +102,17 @@ def FI(eig_data,w_size,w_incre):
             
     if len(k_init)==0:
         k_init.append(0)
+        
+    time_axis = []
+    
     for i in range(0,len(FI_final)):
         FI_final[i].append(float(sum(FI_final[i][min(k_init):len(FI_final[i])]))/len(FI_final[i][min(k_init):len(FI_final[i])]))
-        FI_final[i].append(Time[(i*w_incre+w_size)-1])
+        time_axis.append(Time[(i*w_incre+w_size)-1])
         
-    df_FI=pd.DataFrame(FI_final)
+    FI_final = pd.DataFrame(FI_final)
+    FI_series=pyleo.Series(time=time_axis,value=FI_final.iloc[:,-1])
     
-    return df_FI
+    return FI_series
         
 def SOST(eig_data,s_for_sd):
     Data_num=[]
@@ -143,7 +150,9 @@ def SOST(eig_data,s_for_sd):
     return df_sos
     
 def smooth(series,block_size):
+    
     values = series.value
+    time = series.time
     
     smoothed_values=[]
    
@@ -151,6 +160,8 @@ def smooth(series,block_size):
         for j in range(i-block_size,i):
             smoothed_values.append(float(sum(values[i-block_size:i]))/len(values[i-block_size:i]))
             
-    smoothed_values=FI_smth[0:len(FI)]
+    smoothed_values=smoothed_values[0:len(values)]
     
-    return smoothed_values
+    smoothed_series = pyleo.Series(value=smoothed_values,time=time)
+    
+    return smoothed_series

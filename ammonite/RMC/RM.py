@@ -19,10 +19,10 @@ def RM(series, eps, m, delay, invert_time_axis = False):
         Whether or not to invert the time axis of your input
     '''
     
-    if type(series) == 'pyleoclim.core.ui.Series':
+    if isinstance(series,pyleo.core.ui.Series):
         values = series.value
         time_axis = series.time[m*delay:]
-    elif type(series) == 'pandas.core.series.Series':
+    elif isinstance(series,pandas.core.series.Series):
         values = series.values
         time_axis = list(series.index)[m*delay:]
     #time delay is currently assumed as 1
