@@ -9,13 +9,13 @@ Ammonite.egg-info/requires.txt
 Ammonite.egg-info/top_level.txt
 ammonite/__init__.py
 ammonite/RMC/RM.py
+ammonite/RMC/RM_search.py
 ammonite/RMC/__init__.py
 ammonite/detect/__init__.py
 ammonite/detect/detection.py
 ammonite/fisher/__init__.py
 ammonite/fisher/fisher.py
 ammonite/tests/__init__.py
-ammonite/utils/RM_search.py
 ammonite/utils/__init__.py
 ammonite/utils/bootstrap_test.py
 ammonite/utils/range_finder.py

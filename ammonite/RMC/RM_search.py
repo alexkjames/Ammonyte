@@ -3,10 +3,10 @@ import multiprocessing as mp
 import numpy as np
 
 from ammonite.RMC.RM import RM
-from ammonite.utils.rangefinder import rangefinder
+from ammonite.utils.range_finder import range_finder
 
-def RM_search(series, eps, m, delay ,target_hitrate, tolerance,invert_time_axis = False, initial_hitrate = None, 
-              num_processes = mp.cpu_count()):
+def RM_search(series, eps, m, delay ,target_hitrate, tolerance,amp = 15,invert_time_axis = False, initial_hitrate = None, 
+              num_processes = None):
     '''Tool to find epsilon value tuned for specific target hitrate in recurrence matrix
     
     Parameters
@@ -30,7 +30,12 @@ def RM_search(series, eps, m, delay ,target_hitrate, tolerance,invert_time_axis 
         If you've already calculated the initial hitrate for your settings you can pass it here to save computation time
     num_process : int
         Number of processes to run, automatically set to your cpu count
+    amp : int
+        The amplitude of the range of epsilon value search. Higher values cover ground quickly but converge slowly, the opposite is true for lower values
     '''
+    
+    if num_processes == None:
+        num_processes = mp.cpu_count()
     
     if initial_hitrate == None:
         print(f'Finding initial hitrate from given epsilon value: {eps}')
@@ -50,7 +55,7 @@ def RM_search(series, eps, m, delay ,target_hitrate, tolerance,invert_time_axis 
 
         with mp.Pool(num_processes) as pool:
             
-            eps_range, flag = rangefinder(eps,hitrate,target_hitrate,tolerance,num_processes)
+            eps_range, flag = range_finder(eps,hitrate,target_hitrate,tolerance,num_processes,amp)
             
             if flag == False:
                 
