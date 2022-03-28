@@ -11,6 +11,8 @@ ammonite/__init__.py
 ammonite/RMC/RM.py
 ammonite/RMC/RM_search.py
 ammonite/RMC/__init__.py
+ammonite/core/__init__.py
+ammonite/core/ui.py
 ammonite/detect/__init__.py
 ammonite/detect/detection.py
 ammonite/fisher/__init__.py

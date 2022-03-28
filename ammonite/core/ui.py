@@ -1,12 +1,12 @@
-
 import pyleoclim as pyleo
 import pandas as pd
+import numpy as np
 
 class TimeEmbeddedSeries:
     '''Time embedded time series object. Precursor to recurrence matrix and recurrence network.
     '''
-    def __init__(self,manifold,time,embedding_dimension,embedding_delay,series= None, value_name=None,value_unit=None,time_name=None,time_unit=None,label=None):
-        self.manifold = manifold
+    def __init__(self,embedded_series,time,embedding_dimension,embedding_delay,series= None, value_name=None,value_unit=None,time_name=None,time_unit=None,label=None):
+        self.embedded_series = embedded_series
         self.time = time
         self.embedding_dimension = embedding_dimension
         self.embedding_delay = embedding_delay
@@ -16,6 +16,12 @@ class TimeEmbeddedSeries:
         self.time_name = time_name
         self.time_unit = time_unit
         self.label = label
+
+    # def create_RecurrenceMatrix(self,epsilon):
+    #     return RecurrenceMatrix()
+
+    # def create_RecurrenceNetwork(self,epsilon):
+    #     return RecurrenceNetwork()
 
 class RecurrenceMatrix:
     '''Recurrence matrix object. Used for Recurrence Quantification Analysis (RQA).
@@ -70,8 +76,17 @@ def create_TimeEmbeddedSeries(series,embedding_dimension,embedding_delay,cut='be
         time_name = series.time_name
         time_unit = series.time_unit
         label = series.label
+    
+    elif isinstance(series,pyleo.core.ui.LipdSeries):
+        values = series.value
+        time = series.time[embedding_dimension*embedding_delay:]
+        value_name = series.value_name
+        value_unit = series.value_unit
+        time_name = series.time_name
+        time_unit = series.time_unit
+        label = series.label
 
-    elif isinstance(series,pandas.core.series.Series):
+    elif isinstance(series,pd.core.series.Series):
         values = series.values
         time = list(series.index)[embedding_dimension*embedding_delay:]
         value_name = None
@@ -79,6 +94,10 @@ def create_TimeEmbeddedSeries(series,embedding_dimension,embedding_delay,cut='be
         time_name = None
         time_unit = None
         label = None
+
+    else:
+        print(type(series))
+        raise ValueError('Object is not pyleoclim Series or LipdSeries or pandas Series object. Please convert into one of these object types.')
 
     manifold = np.ndarray(shape = (len(values)-(embedding_dimension*embedding_delay),embedding_dimension))
 
@@ -111,7 +130,3 @@ def create_TimeEmbeddedSeries(series,embedding_dimension,embedding_delay,cut='be
         time_unit=time_unit,
         label=label
     )
-
-def create_RecurrenceMatrix(manifold,epsilon):
-
-def create_RecurrenceNetwork(manifold,epsilon):

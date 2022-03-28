@@ -73,9 +73,7 @@ def FI(eig_data,w_size,w_incre):
                                 
                         Bin_1.append(Bin_1_temp)
                         Bin_2.extend(Bin_1_temp)
-                    
-#                if win_number==0:
-#                    print Bin_1 , tl
+
                 prob=[0]
                 for i in Bin_1:
                     prob.append(float(len(i))/len(Bin_2))
@@ -110,7 +108,7 @@ def FI(eig_data,w_size,w_incre):
         time_axis.append(Time[(i*w_incre+w_size)-1])
         
     FI_final = pd.DataFrame(FI_final)
-    FI_series=pyleo.Series(time=time_axis,value=FI_final.iloc[:,-1])
+    FI_series=pyleo.Series(time=time_axis,value=FI_final.iloc[:,-1],label='Fisher Information')
     
     return FI_series
         

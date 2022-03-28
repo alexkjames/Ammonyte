@@ -54,7 +54,7 @@ def lp_regime_change(series, eps, m, delay, w_size, w_incre, invert_time_axis = 
     
     eig_data = []
     for idx, i in enumerate(time_axis):
-        eig_data.append([i,eigvec[idx,1],eigvec[idx,2],eigvec[idx,3],eigvec[idx,4]])
+        eig_data.append([i,eigvec[idx,0],eigvec[idx,1],eigvec[idx,2],eigvec[idx,3]])
         
     FI_series = FI(eig_data,w_size,w_incre)
     
