@@ -5,8 +5,10 @@ def range_finder(eps, hitrate, target_hitrate, tolerance, num_processes, amp):
     if hitrate < (target_hitrate - tolerance):
         
         miss = target_hitrate - hitrate
+
+        eps_bounds = (eps, eps + np.sqrt(miss*amp))
         
-        eps_range = np.linspace(eps, eps + np.sqrt(miss*amp), num_processes)
+        eps_range = np.linspace(min(eps_bounds), max(eps_bounds), num_processes)
         
         print(f'Epsilon value is: {eps:.4f}')
         print(f'Hitrate is {hitrate:.4f}. This is outside of the tolerance window.')
@@ -18,8 +20,10 @@ def range_finder(eps, hitrate, target_hitrate, tolerance, num_processes, amp):
     elif hitrate > (target_hitrate + tolerance):
         
         miss = hitrate - target_hitrate
+
+        eps_bounds = (eps, eps - np.sqrt(miss*amp))
         
-        eps_range = np.linspace(eps, eps - np.sqrt(miss*amp)**2, num_processes)
+        eps_range = np.linspace(min(eps_bounds), max(eps_bounds), num_processes)
         
         print(f'Epsilon value is: {eps:.4f}')
         print(f'Hitrate is {hitrate:.4f}. This is outside of the tolerance window.')

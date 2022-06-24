@@ -26,7 +26,10 @@ setup(
     keywords=['Paleoclimate, Data Analysis, Nonlinear'],
     classifiers=[],
     install_requires=[
-        "pyleoclim>=0.7.0"
+        "pyleoclim>=0.7.0",
+        "scipy>=1.7.1",
+        "numpy>=1.21.5",
+        "PyRQA>=8.0.0",
     ],
     python_requires=">=3.8.0"
 )
