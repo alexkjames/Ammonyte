@@ -11,6 +11,11 @@ import math
 import numpy as np
 import pyleoclim as pyleo
 
+__all__ = [
+    'fisher_information',
+    'smooth_series'
+]
+
 def fisher_information(eig_data,w_size,w_incre):
     Data_num=[]
     Time=[]
@@ -147,9 +152,18 @@ def SOST(eig_data,s_for_sd):
     return df_sos
     
 def smooth_series(series,block_size):
+    '''Function to smooth series by averaging chunks
+    
+    Parameters
+    ----------
+    
+    series : pyleoclim.Series object
+        Series to be smoothed
+        
+    block_size : int
+        Size of each block, assumes an evenly spaced series'''
     
     values = series.value
-    time = series.time
     
     smoothed_values=[]
    
@@ -159,6 +173,6 @@ def smooth_series(series,block_size):
             
     smoothed_values=smoothed_values[0:len(values)]
     
-    smoothed_series = pyleo.Series(value=smoothed_values,time=time)
+    series.value = smoothed_values
     
-    return smoothed_series
+    return series

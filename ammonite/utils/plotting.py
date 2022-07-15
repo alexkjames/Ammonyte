@@ -8,6 +8,10 @@ import seaborn as sns
 
 from .sampling import confidence_interval
 
+__all__ = [
+    'bootstrap_plot'
+]
+
 def get_labels(obj):
     '''Function to create plotting labels from object metadata.
     
@@ -36,7 +40,7 @@ def get_labels(obj):
 
     return xlabel, ylabel
 
-def bootstrap_plot(series, ax=None,line_color=None,fill_color=None, ci_kwargs = None):
+def bootstrap_plot(series, ax=None,line_color=None,fill_color=None, ci_kwargs = None, background_series=None, background_kwargs = None):
     '''Function for plotting rqa results with confidence bounds
     
     series : pyleoclim.Series
@@ -51,6 +55,12 @@ def bootstrap_plot(series, ax=None,line_color=None,fill_color=None, ci_kwargs = 
     fill_color : str, tuple
         String or rgb tuple to use for fill color in between lines
 
+    background_series : pyleoclim.Series
+        Optional to pass a different series that will be plotted behind the main series plot
+
+    background_kwargs : dict
+        Key word arguments for the background plot. If none are passed, the color of the main plot will be re-used 
+        and alpha will be set to .2
 
 
     See also
@@ -63,6 +73,8 @@ def bootstrap_plot(series, ax=None,line_color=None,fill_color=None, ci_kwargs = 
         raise ValueError('This function requires a pyleoclim.Series object, please reformat and pass again.')
 
     ci_kwargs = {} if ci_kwargs is None else ci_kwargs.copy()
+
+    series = series.interp(step=1)
 
     upper,lower = confidence_interval(series,**ci_kwargs)
     
@@ -97,9 +109,29 @@ def bootstrap_plot(series, ax=None,line_color=None,fill_color=None, ci_kwargs = 
     if ax is None:
         fig,ax = plt.subplots(figsize=(12,8))
 
+    if background_series:
+
+        if not isinstance(background_series,pyleo.core.Series):
+            raise ValueError('background_series does not appear to be a pyleoclim.Series object')
+        
+        #Standardize background_series values
+        background_series.value -= np.mean(background_series.value)
+        background_series.value /= max(background_series.value)
+
+        #Adjust scaling to match that of main series
+        background_series.value *= max(series.value - np.mean(series.value))
+        background_series.value += np.mean(series.value)
+
+        background_kwargs = {} if background_kwargs is None else background_kwargs.copy()
+
+        if 'alpha' not in background_kwargs:
+            background_kwargs['alpha'] = .2
+        if 'color' not in background_kwargs:
+            background_kwargs['color'] = line_color
+
+        background_series.plot(ax=ax, **background_kwargs)
+
     series.plot(ax=ax,color=line_color)
-    
-    end = time[-1]
         
     ufill_values = np.zeros(len(time)) + upper
     lfill_values = np.zeros(len(time)) + lower

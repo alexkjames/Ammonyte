@@ -5,6 +5,10 @@ import numpy as np
 from ammonite.utils.rm import rm
 from ammonite.utils.range_finder import range_finder
 
+__all__ = [
+    'rm_search'
+]
+
 def rm_search(series, eps, m, tau ,target_density, tolerance,amp = 15, initial_hitrate = None, num_processes = None):
     '''Tool to find epsilon value tuned for specific target density in recurrence matrix
     
@@ -37,7 +41,7 @@ def rm_search(series, eps, m, tau ,target_density, tolerance,amp = 15, initial_h
     if initial_hitrate == None:
         print(f'Finding initial hitrate from given epsilon value: {eps}')
         initial_result = rm(series, eps, m, tau)
-        initial_hitrate = np.sum(initial_result['RM'])/np.size(initial_result['RM'])
+        initial_hitrate = np.sum(initial_result['rm'])/np.size(initial_result['rm'])
         print(f'Initial hitrate is {initial_hitrate:.4f}')
     
     if np.abs(initial_hitrate - target_density) <= tolerance:
