@@ -15,7 +15,7 @@ from pyrqa.computation import RPComputation
 
 from .recurrence_matrix import RecurrenceMatrix
 from .recurrence_network import RecurrenceNetwork
-from ..utils.rm_search import rm_search
+from ..utils.parameters import eps_search, tau_search
 from ..utils.plotting import get_labels
 
 
@@ -29,7 +29,7 @@ class TimeEmbeddedSeries:
         Embedding dimension
     
     tau : int
-        Embedding delay
+        Embedding delay, will be calculated according to first minimum of mutual information if not passed
 
     embedded_data : array
         Time delay embedded data. If not passed will be calculated from series, m, and tau
@@ -53,7 +53,7 @@ class TimeEmbeddedSeries:
         Label for embedding
     '''
 
-    def __init__(self,series,m,tau,embedded_data=None,embedded_time=None,value_name=None,value_unit=None,time_name=None,time_unit=None,label=None):
+    def __init__(self,series,m,tau=None,embedded_data=None,embedded_time=None,value_name=None,value_unit=None,time_name=None,time_unit=None,label=None):
         self.series = series
         self.m = m
         self.tau = tau
@@ -68,24 +68,27 @@ class TimeEmbeddedSeries:
         if self.embedded_data is not None and self.embedded_time is None:
             raise ValueError('Embedded data was passed without associated time axis. Please pass neither or both')
 
+        if self.tau is None:
+            self.tau = tau_search(self.series)
+
         if self.embedded_data is None:
 
-            if isinstance(series,pyleo.core.Series) or isinstance(series,pyleo.core.LipdSeries):
-                values = series.value
-                time_axis = series.time[:(-m*tau)]
+            if isinstance(self.series, (pyleo.core.Series, pyleo.core.LipdSeries)):
+                values = self.series.value
+                time_axis = self.series.time[:(-self.m*self.tau)]
 
-            elif isinstance(series,pd.Series):
-                values = series.values
-                time_axis = list(series.index)[:(-m*tau)]
+            elif isinstance(self.series,pd.Series):
+                values = self.series.values
+                time_axis = list(self.series.index)[:(-self.m*self.tau)]
 
             else:
                 raise ValueError('Unrecognized data type. Please pass a pyleoclim Series or pandas Series type object')
             
-            manifold = np.ndarray(shape = (len(values)-(m*tau),m))
+            manifold = np.ndarray(shape = (len(values)-(self.m*self.tau),self.m))
 
             for idx, i in enumerate(values):
-                if idx < (len(values)-(m*tau)):
-                    manifold[idx] = values[idx:idx+(m*tau):tau]
+                if idx < (len(values)-(self.m*self.tau)):
+                    manifold[idx] = values[idx:idx+(self.m*self.tau):self.tau]
 
             self.embedded_data = manifold
             self.embedded_time = time_axis
@@ -142,7 +145,7 @@ class TimeEmbeddedSeries:
         elif num_processes > mp.cpu_count():
             raise ValueError('num_processes is greater than the number of available cpus.')
 
-        epsilon = rm_search(series=self.series,eps=1,m=self.m,tau=self.tau,target_density=target_density,tolerance=tolerance,**search_kwargs)
+        epsilon = eps_search(series=self.series,m=self.m,tau=self.tau,target_density=target_density,tolerance=tolerance,**search_kwargs)
 
         return epsilon
 

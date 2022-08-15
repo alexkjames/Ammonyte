@@ -25,7 +25,7 @@ def rm(series, eps, m, delay):
         Delay parameter for time embedding
     '''
     
-    if isinstance(series,pyleo.core.ui.Series):
+    if isinstance(series,pyleo.core.Series):
         values = series.value
         time_axis = series.time[:-(m-1)*delay]
     elif isinstance(series,pd.Series):
@@ -48,4 +48,4 @@ def rm(series, eps, m, delay):
 
     matrix = result.recurrence_matrix
 
-    return {'rm':matrix, 'time_axis':time_axis}
+    return {'rm':matrix, 'time_axis':time_axis,'eps':eps}

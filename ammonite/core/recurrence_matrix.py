@@ -111,7 +111,7 @@ class RecurrenceMatrix:
             imshow_kwargs['origin'] = 'lower'
 
         if 'extent' not in imshow_kwargs:
-            imshow_kwargs['extent'] = [self.time[-1],self.time[0],self.time[-1],self.time[0]]
+            imshow_kwargs['extent'] = [self.time[0],self.time[-1],self.time[0],self.time[-1]]
 
         if xlabel is None:
             xlabel,_ = get_labels(self)

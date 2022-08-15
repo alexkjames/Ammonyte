@@ -19,8 +19,8 @@ ammonite/tests/test_core_time_embedded_series.py
 ammonite/utils/RM.py
 ammonite/utils/__init__.py
 ammonite/utils/fisher.py
+ammonite/utils/parameters.py
 ammonite/utils/plotting.py
 ammonite/utils/range_finder.py
 ammonite/utils/rm.py
-ammonite/utils/rm_search.py
 ammonite/utils/sampling.py

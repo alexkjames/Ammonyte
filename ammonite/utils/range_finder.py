@@ -6,7 +6,7 @@ def range_finder(eps, hitrate, target_hitrate, tolerance, num_processes, amp):
         
         miss = target_hitrate - hitrate
 
-        eps_bounds = (eps, eps + np.sqrt(miss*amp))
+        eps_bounds = (eps, eps + miss*amp)
         
         eps_range = np.linspace(min(eps_bounds), max(eps_bounds), num_processes)
         
@@ -21,7 +21,7 @@ def range_finder(eps, hitrate, target_hitrate, tolerance, num_processes, amp):
         
         miss = hitrate - target_hitrate
 
-        eps_bounds = (eps, eps - np.sqrt(miss*amp))
+        eps_bounds = (eps, eps - miss*amp)
         
         eps_range = np.linspace(min(eps_bounds), max(eps_bounds), num_processes)
         

@@ -4,5 +4,5 @@
 from .sampling import *
 from .range_finder import *
 from .plotting import *
-from .rm_search import *
+from .parameters import *
 from .fisher import *
