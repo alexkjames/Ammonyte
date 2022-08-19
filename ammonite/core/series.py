@@ -49,15 +49,20 @@ class Series(pyleo.Series):
 
     def determinism(self,window_size,overlap,m,tau,radius):
         '''Calculate determinism of a series
+
+        Note that series must be evenly spaced for this method.
+        See interp, bin, and gkernel methods in parent class pyleoclim.Series for details.
         
         Parameters
         ----------
         
         window_size : int
-            Size of window to use when calculating recurrence plots for determinism statistic
+            Size of window to use when calculating recurrence plots for determinism statistic.
+            Note this is in units of the time axis.
         
         overlap : int
-            Amount of overlap to allow between windows
+            Amount of overlap to allow between windows.
+            Note this is in units of the time axis.
 
         m : int
             Embedding dimension to use when performing time delay embedding,
@@ -118,15 +123,20 @@ class Series(pyleo.Series):
 
     def laminarity(self,window_size,overlap,m,tau,radius):
         '''Calculate laminarity of a series
+
+        Note that series must be evenly spaced for this method.
+        See interp, bin, and gkernel methods in parent class pyleoclim.Series for details.
         
         Parameters
         ----------
         
         window_size : int
-            Size of window to use when calculating recurrence plots for determinism statistic
+            Size of window to use when calculating recurrence plots for determinism statistic.
+            Note this is in units of the time axis.
         
         overlap : int
             Amount of overlap to allow between windows
+            Note this is in units of the time axis.
 
         m : int
             Embedding dimension to use when performing time delay embedding,
