@@ -1,4 +1,4 @@
-''' Tests for ammonite.utils.time_embedding
+''' Tests for ammonite.core.time_embedded_series
 Naming rules:
 1. class: Test{filename}{Class}{method} with appropriate camel case
 2. function: test_{method}_t{test_id}

@@ -1,4 +1,4 @@
-''' Tests for ammonite.core.recurrence_network
+''' Tests for ammonite.core.series
 Naming rules:
 1. class: Test{filename}{Class}{method} with appropriate camel case
 2. function: test_{method}_t{test_id}
@@ -12,3 +12,30 @@ Notes on how to test:
 4. after `pip install pytest-xdist`, one may execute "pytest -n 4" to test in parallel with number of workers specified by `-n`
 5. for more details, see https://docs.pytest.org/en/stable/usage.html
 '''
+
+import pytest
+import pyleoclim as pyleo
+import ammonite as amt
+import numpy as np
+
+def gen_normal(loc=0, scale=1, nt=100):
+    ''' Generate random data with a Gaussian distribution
+    '''
+    t = np.arange(nt)
+    np.random.seed(42)
+    v = np.random.normal(loc=loc, scale=scale, size=nt)
+    ts = pyleo.Series(t,v)
+    return ts
+
+class TestCoreSeriesEmbed:
+    '''Tests for embed function
+    '''
+
+    @pytest.mark.parametrize('m,tau',[(10,5),(10,None)])
+    def test_embed(self,m,tau):
+        '''Test embed function with and without a tau value'''
+
+        ts = gen_normal()
+        amt_ts = amt.Series(ts.time,ts.value)
+
+        td = amt_ts.embed(m,tau)

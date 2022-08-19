@@ -11,11 +11,14 @@ ammonite/__init__.py
 ammonite/core/__init__.py
 ammonite/core/recurrence_matrix.py
 ammonite/core/recurrence_network.py
+ammonite/core/series.py
 ammonite/core/time_embedded_series.py
 ammonite/tests/__init__.py
 ammonite/tests/test_core_recurrence_matrix.py
 ammonite/tests/test_core_recurrence_network.py
+ammonite/tests/test_core_series.py
 ammonite/tests/test_core_time_embedded_series.py
+ammonite/tests/test_utils_parameters.py
 ammonite/utils/RM.py
 ammonite/utils/__init__.py
 ammonite/utils/fisher.py
