@@ -24,7 +24,7 @@ def gen_normal(loc=0, scale=1, nt=100):
     t = np.arange(nt)
     np.random.seed(42)
     v = np.random.normal(loc=loc, scale=scale, size=nt)
-    ts = pyleo.Series(t,v)
+    ts = amt.Series(t,v)
     return ts
 
 class TestCoreSeriesEmbed:
@@ -32,10 +32,30 @@ class TestCoreSeriesEmbed:
     '''
 
     @pytest.mark.parametrize('m,tau',[(10,5),(10,None)])
-    def test_embed(self,m,tau):
+    def test_embed_t0(self,m,tau):
         '''Test embed function with and without a tau value'''
 
         ts = gen_normal()
-        amt_ts = amt.Series(ts.time,ts.value)
 
-        td = amt_ts.embed(m,tau)
+        td = ts.embed(m,tau)
+
+class TestCoreSeriesDeterminism:
+    '''Tests for determinism function
+    '''
+
+    @pytest.mark.parametrize('window_size,overlap,radius,m,tau',[(10,5,1,5,2),(12,4,.1,8,4)])
+    def test_determinism_t0(self,window_size,overlap,m,tau,radius):
+
+        ts = gen_normal()
+
+        det = ts.determinism(window_size,overlap,m,tau,radius)
+
+class TestCoreSeriesLaminarity:
+    '''Tests for laminarity function'''
+
+    @pytest.mark.parametrize('window_size,overlap,radius,m,tau',[(10,5,1,5,2),(12,4,.1,8,4)])
+    def test_laminarity_t0(self,window_size,overlap,m,tau,radius):
+
+        ts = gen_normal()
+
+        lam = ts.laminarity(window_size,overlap,m,tau,radius)

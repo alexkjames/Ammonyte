@@ -26,7 +26,7 @@ def gen_normal(loc=0, scale=1, nt=100):
     t = np.arange(nt)
     np.random.seed(42)
     v = np.random.normal(loc=loc, scale=scale, size=nt)
-    ts = pyleo.Series(t,v)
+    ts = amt.Series(t,v)
     return ts
 
 class TestUtilsTauSearch:
@@ -34,13 +34,13 @@ class TestUtilsTauSearch:
     '''
 
     @pytest.mark.parametrize('num_lags,return_MI',[(30,False),(30,True),(10,False)])
-    def test_tau_search(self,num_lags,return_MI):
+    def test_tau_search_t0(self,num_lags,return_MI):
         '''Test tau search on gaussian series
         '''
 
-        series= gen_normal()
+        ts = gen_normal()
 
         if return_MI is False:
-            tau = tau_search(series,num_lags,return_MI)
+            tau = tau_search(ts,num_lags,return_MI)
         else:
-            tau, MI = tau_search(series,num_lags,return_MI)
+            tau, MI = tau_search(ts,num_lags,return_MI)
