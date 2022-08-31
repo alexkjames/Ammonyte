@@ -121,7 +121,7 @@ class TimeEmbeddedSeries:
         Returns
         -------
         
-        RecurrenceMatrix : ammonite.RecurrenceMatrix object'''
+        RecurrenceMatrix : ammonyte.RecurrenceMatrix object'''
 
         ts = EmbeddedSeries(self.embedded_data)
 
@@ -153,7 +153,7 @@ class TimeEmbeddedSeries:
         Returns
         -------
         
-        RecurrenceNetwork : ammonite.RecurrenceNetwork object'''
+        RecurrenceNetwork : ammonyte.RecurrenceNetwork object'''
 
         ts = EmbeddedSeries(self.embedded_data)
 
@@ -212,7 +212,7 @@ class TimeEmbeddedSeries:
         See also
         --------
 
-        ammonite.utils.rm_search
+        ammonyte.utils.rm_search
         '''
 
         if num_processes is None:

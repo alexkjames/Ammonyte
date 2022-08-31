@@ -21,7 +21,7 @@ from ..core.recurrence_matrix import RecurrenceMatrix
 from ..utils.parameters import tau_search
 
 class Series(pyleo.Series):
-    '''Ammonite series object, launching point for most ammonite analysis.
+    '''Ammonyte series object, launching point for most ammonyte analysis.
 
     Child of pyleoclim.Series, so shares all methods with pyleoclim.Series plus those
     defined here.
@@ -84,8 +84,8 @@ class Series(pyleo.Series):
         Returns
         -------
 
-        det_series : ammonite.Series
-            Ammonite.Series object containing time series of the determinism statistic
+        det_series : ammonyte.Series
+            Ammonyte.Series object containing time series of the determinism statistic
         '''
        
         series = self
@@ -163,8 +163,8 @@ class Series(pyleo.Series):
         Returns
         -------
 
-        lam_series : ammonite.Series
-            Ammonite.Series object containing time series of the laminarity statistic
+        lam_series : ammonyte.Series
+            Ammonyte.Series object containing time series of the laminarity statistic
         '''
 
         series = self

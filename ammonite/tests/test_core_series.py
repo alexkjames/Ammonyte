@@ -1,4 +1,4 @@
-''' Tests for ammonite.core.series
+''' Tests for ammonyte.core.series
 Naming rules:
 1. class: Test{filename}{Class}{method} with appropriate camel case
 2. function: test_{method}_t{test_id}
@@ -15,7 +15,7 @@ Notes on how to test:
 
 import pytest
 import pyleoclim as pyleo
-import ammonite as amt
+import ammonyte as amt
 import numpy as np
 
 def gen_normal(loc=0, scale=1, nt=100):

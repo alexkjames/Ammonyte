@@ -11,7 +11,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name='Ammonite',
+    name='Ammonyte',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
@@ -22,7 +22,7 @@ setup(
     long_description_content_type = 'text/markdown',
     author='Alexander James',
     author_email='akjames@usc.edu',
-    url='https://github.com/alexkjames/Ammonite',
+    url='https://github.com/alexkjames/Ammonyte',
     keywords=['Paleoclimate, Data Analysis, Nonlinear'],
     classifiers=[],
     install_requires=[

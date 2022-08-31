@@ -1,4 +1,4 @@
-''' Tests for ammonite.core.recurrence_matrix
+''' Tests for ammonyte.core.recurrence_matrix
 Naming rules:
 1. class: Test{filename}{Class}{method} with appropriate camel case
 2. function: test_{method}_t{test_id}
@@ -15,7 +15,7 @@ Notes on how to test:
 
 import pytest
 import pyleoclim as pyleo
-import ammonite as amt
+import ammonyte as amt
 
 def load_data():
     #Loads stott MD982176 record

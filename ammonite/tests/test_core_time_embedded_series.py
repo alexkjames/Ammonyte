@@ -1,4 +1,4 @@
-''' Tests for ammonite.core.time_embedded_series
+''' Tests for ammonyte.core.time_embedded_series
 Naming rules:
 1. class: Test{filename}{Class}{method} with appropriate camel case
 2. function: test_{method}_t{test_id}
@@ -15,7 +15,7 @@ Notes on how to test:
 
 import pytest
 import pyleoclim as pyleo
-import ammonite as amt
+import ammonyte as amt
 import numpy as np
 
 def load_data():

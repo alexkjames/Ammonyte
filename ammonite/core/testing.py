@@ -1,4 +1,4 @@
-import ammonite as amt
+import ammonyte as amt
 import numpy as np
 import matplotlib.pyplot as plt
 

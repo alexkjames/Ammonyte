@@ -6,7 +6,7 @@ from ..core.recurrence_matrix import RecurrenceMatrix
 class RecurrenceNetwork(RecurrenceMatrix):
     '''Recurrence network object. Used for Recurrence Network Analysis (RNA).
 
-    Child of ammonite.RecurrenceMatrix, so it has all of the RecurrenceMatrix methods
+    Child of ammonyte.RecurrenceMatrix, so it has all of the RecurrenceMatrix methods
     plus additional methods defined here
     '''
     def __init__(self,matrix,time,epsilon,series=None,value_name=None,value_unit=None,time_name=None,time_unit=None,label=None):

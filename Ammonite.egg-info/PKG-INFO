@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
-Name: Ammonite
+Name: Ammonyte
 Version: 0.0.1
 Summary: A Python package for nonlinear paleoclimate data analysis
-Home-page: https://github.com/alexkjames/Ammonite
+Home-page: https://github.com/alexkjames/Ammonyte
 Author: Alexander James
 Author-email: akjames@usc.edu
 License: GPL-3.0 License
@@ -12,7 +12,7 @@ Requires-Python: >=3.8.0
 Description-Content-Type: text/markdown
 License-File: LICENSE
 
-# Ammonite
+# Ammonyte
 
 Python package designed for conducting non-linear time series analysis of paleoclimate data. Recommended for usage in tandem with [Pyleoclim](https://github.com/LinkedEarth/Pyleoclim_util). Currently under heavy construction.
 

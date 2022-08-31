@@ -16,12 +16,12 @@ __all__ = [
 def get_labels(obj):
     '''Function to create plotting labels from object metadata.
     
-    Assumes specific object properties specific to ammonite objects
+    Assumes specific object properties specific to ammonyte objects
     
     Parameters
     ----------
     
-    obj : ammonite.TimeEmbeddedSeries, ammonite.RecurrenceMatrix, ammonite.RecurrenceNetwork'''
+    obj : ammonyte.TimeEmbeddedSeries, ammonyte.RecurrenceMatrix, ammonyte.RecurrenceNetwork'''
 
     if obj.time_name is not None:
         if obj.time_unit is not None:
@@ -64,7 +64,7 @@ def bootstrap_fill_plot(series,ax=None,line_color=None,fill_color=None,transitio
         Key word arguments for the main plot, see `pyleoclim.Series.plot <https://pyleoclim-util.readthedocs.io/en/latest/core/api.html#series-pyleoclim-series>_ for details
 
     ci_kwargs : dict
-        Key word arguments for calculating the confidence interval. Only to be used if `transition_interval` is not passed. See ammonite.utils.sampling.confidence_interval for details
+        Key word arguments for calculating the confidence interval. Only to be used if `transition_interval` is not passed. See ammonyte.utils.sampling.confidence_interval for details
 
     background_series : pyleoclim.Series
         Optional to pass a different series that will be plotted behind the main series plot
@@ -88,7 +88,7 @@ def bootstrap_fill_plot(series,ax=None,line_color=None,fill_color=None,transitio
     See also
     --------
 
-    ammonite.utils.sampling.confidence_interval
+    ammonyte.utils.sampling.confidence_interval
 
     '''
 
@@ -212,7 +212,7 @@ def bootstrap_scatter_plot(series,ax=None,marker_color=None,transition_interval=
     See also
     --------
 
-    ammonite.utils.sampling.confidence_interval
+    ammonyte.utils.sampling.confidence_interval
 
     '''
 

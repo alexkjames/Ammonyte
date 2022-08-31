@@ -167,7 +167,7 @@ def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initi
 #     Parameters
 #     ----------
     
-#     series : pyleoclim.Series or ammonite.Series
+#     series : pyleoclim.Series or ammonyte.Series
 #         Series to apply grid_search to
         
 #     method : str
@@ -184,7 +184,7 @@ def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initi
 #     -------
 
 #     res : list
-#         List of ammonite.RQA_Res objects
+#         List of ammonyte.RQA_Res objects
         
 #     '''
 

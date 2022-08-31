@@ -30,13 +30,13 @@ class RQARes(pyleo.Series):
         Returns
         -------
         
-        smoothed_series : ammonite.RQA_Res
-            Smoothed version of your original RQA_Res object
+        smoothed_series : ammonyte.RQARes
+            Smoothed version of your original RQARes object
             
         See also
         --------
         
-        ammonite.utils.fisher.smooth_series'''
+        ammonyte.utils.fisher.smooth_series'''
 
         if block_size is None:
             block_size = int(len(self.time)/15)
@@ -106,7 +106,7 @@ class RQARes(pyleo.Series):
             Key word arguments for the main plot, see `pyleoclim.Series.plot <https://pyleoclim-util.readthedocs.io/en/latest/core/api.html#series-pyleoclim-series>_ for details
 
         ci_kwargs : dict
-            Key word arguments for calculating the confidence interval. Only to be used if `transition_interval` is not passed. See ammonite.utils.sampling.confidence_interval for details
+            Key word arguments for calculating the confidence interval. Only to be used if `transition_interval` is not passed. See ammonyte.utils.sampling.confidence_interval for details
 
         background_series : pyleoclim.Series
             Optional to pass a different series that will be plotted behind the main series plot
@@ -135,7 +135,7 @@ class RQARes(pyleo.Series):
         See also
         --------
 
-        ammonite.utils.sampling.confidence_interval
+        ammonyte.utils.sampling.confidence_interval
 
         '''
 
@@ -289,7 +289,7 @@ class RQARes(pyleo.Series):
             Key word arguments for the main plot, see `matplotlib.pyplot.scatter <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html>_ for details
 
         ci_kwargs : dict
-            Key word arguments for calculating the confidence interval. Only to be used if `transition_interval` is not passed. See ammonite.utils.sampling.confidence_interval for details
+            Key word arguments for calculating the confidence interval. Only to be used if `transition_interval` is not passed. See ammonyte.utils.sampling.confidence_interval for details
 
         background_series : pyleoclim.Series
             Optional to pass a different series that will be plotted behind the main series plot
@@ -318,7 +318,7 @@ class RQARes(pyleo.Series):
         See also
         --------
 
-        ammonite.utils.sampling.confidence_interval
+        ammonyte.utils.sampling.confidence_interval
 
         '''
 
