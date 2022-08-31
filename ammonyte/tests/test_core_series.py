@@ -37,7 +37,7 @@ class TestCoreSeriesEmbed:
 
         ts = gen_normal()
 
-        td = ts.embed(m,tau)
+        ts.embed(m,tau)
 
 class TestCoreSeriesDeterminism:
     '''Tests for determinism function
@@ -48,7 +48,7 @@ class TestCoreSeriesDeterminism:
 
         ts = gen_normal()
 
-        det = ts.determinism(window_size,overlap,m,tau,radius)
+        ts.determinism(window_size,overlap,m,tau,radius)
 
 class TestCoreSeriesLaminarity:
     '''Tests for laminarity function'''
@@ -58,4 +58,4 @@ class TestCoreSeriesLaminarity:
 
         ts = gen_normal()
 
-        lam = ts.laminarity(window_size,overlap,m,tau,radius)
+        ts.laminarity(window_size,overlap,m,tau,radius)
