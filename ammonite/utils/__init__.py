@@ -6,3 +6,4 @@ from .range_finder import *
 from .plotting import *
 from .parameters import *
 from .fisher import *
+from .rm import *

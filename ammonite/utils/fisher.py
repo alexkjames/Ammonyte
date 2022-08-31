@@ -112,9 +112,9 @@ def fisher_information(eig_data,w_size,w_incre):
         time_axis.append(Time[(i*w_incre+w_size)-1])
         
     FI_final = pd.DataFrame(FI_final)
-    FI_series=pyleo.Series(time=time_axis,value=FI_final.iloc[:,-1],label='Fisher Information')
+    values = FI_final.iloc[:,-1]
     
-    return FI_series
+    return np.array(time_axis), np.array(values)
         
 def SOST(eig_data,s_for_sd):
     Data_num=[]
@@ -173,6 +173,6 @@ def smooth_series(series,block_size):
             
     smoothed_values=smoothed_values[0:len(values)]
     
-    series.value = smoothed_values
+    series.value = np.array(smoothed_values)
     
     return series

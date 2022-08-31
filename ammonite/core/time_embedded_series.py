@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import itertools
 
 import pyleoclim as pyleo
 import numpy as np
@@ -13,10 +14,10 @@ from pyrqa.neighbourhood import FixedRadius
 from pyrqa.metric import EuclideanMetric
 from pyrqa.computation import RPComputation
 
-from .recurrence_matrix import RecurrenceMatrix
-from .recurrence_network import RecurrenceNetwork
-from ..utils.parameters import eps_search, tau_search
-from ..utils.plotting import get_labels
+from ..core.recurrence_matrix import RecurrenceMatrix
+from ..core.recurrence_network import RecurrenceNetwork
+from ..utils.parameters import tau_search
+from ..utils.range_finder import range_finder
 
 
 class TimeEmbeddedSeries:
@@ -108,48 +109,6 @@ class TimeEmbeddedSeries:
         if self.label is None:
             self.label = self.series.label
 
-    def find_epsilon(self,target_density,tolerance,num_processes=None,search_kwargs=None):
-        '''Function to find epsilon value given target recurrence matrix density
-        
-        Parameters
-        ----------
-
-        target_density : float
-            Target density of recurrent points in recurrence matrix. Should be a value between zero and one.
-
-        tolerance : float
-            Allowable difference between desired density and calculated density.
-        
-        num_processes : int
-            Number of parallel processes to run. Check number of available processes on your machine with multiprocessing.cpu_count().
-
-        search_kwargs : dict
-            Key word arguments for ammonite.utils.rm_search.rm_search.
-
-        Returns
-        -------
-
-        epsilon : float
-            Epsilon value that produces desired recurrence density within tolerance value provided.
-
-        See also
-        --------
-
-        ammonite.utils.rm_search
-        '''
-
-        search_kwargs={} if search_kwargs is None else search_kwargs.copy()
-
-        if num_processes is None:
-            num_processes = int(mp.cpu_count()/2)
-        elif num_processes > mp.cpu_count():
-            raise ValueError('num_processes is greater than the number of available cpus.')
-
-        epsilon = eps_search(series=self.series,m=self.m,tau=self.tau,target_density=target_density,tolerance=tolerance,**search_kwargs)
-
-        return epsilon
-
-
     def create_recurrence_matrix(self,epsilon):
         '''Function to create Recurrence Matrix object
         
@@ -178,7 +137,7 @@ class TimeEmbeddedSeries:
 
         matrix = result.recurrence_matrix
 
-        return RecurrenceMatrix(matrix=matrix,time=self.embedded_time,epsilon=epsilon,series=self.series,
+        return RecurrenceMatrix(matrix=matrix,time=self.embedded_time,epsilon=epsilon,series=self.series, m = self.m, tau = self.tau,
                                 value_name=self.value_name,value_unit=self.value_unit,time_name=self.time_name,
                                 time_unit=self.time_unit,label=self.label)
 
@@ -195,6 +154,7 @@ class TimeEmbeddedSeries:
         -------
         
         RecurrenceNetwork : ammonite.RecurrenceNetwork object'''
+
         ts = EmbeddedSeries(self.embedded_data)
 
         settings = Settings(ts,
@@ -212,3 +172,123 @@ class TimeEmbeddedSeries:
         return RecurrenceNetwork(matrix=matrix,time=self.embedded_time,epsilon=epsilon,series=self.series,
                                 value_name=self.value_name,value_unit=self.value_unit,time_name=self.time_name,
                                 time_unit=self.time_unit,label=self.label)
+
+    def find_epsilon(self,eps,target_density=.05,tolerance=.01,initial_hitrate=None,parallelize=True,num_processes=None,amp=10,verbose=True):
+        '''Function to find epsilon value given target recurrence matrix density
+        
+        Parameters
+        ----------
+
+        eps : float
+            Starting epsilon value (best guess)
+
+        target_density : float
+            Desired recurrence matrix hitrate
+
+        tolerance : float
+            Amount of allowable difference between target hitrate and actual hitrate
+
+        initial_hitrate : float
+            If you've already calculated the initial hitrate for your settings you can pass it here to save computation time
+
+        parallelize : bool; {True,False}
+            Whether or not to parallelize the search process. Currently only tested on macOS, could be issues running this on Windows.
+
+        num_processes : int
+            Number of processes to run, automatically set to your cpu count
+
+        amp : int
+            The amplitude of the range of epsilon value search. Higher values cover ground quickly but converge slowly, the opposite is true for lower values
+
+        verbose : bool; {True,False}
+            Whether or not to print output after each iteration
+
+        Returns
+        -------
+
+        epsilon : float
+            Epsilon value that produces desired recurrence density within tolerance value provided.
+
+        See also
+        --------
+
+        ammonite.utils.rm_search
+        '''
+
+        if num_processes is None:
+            if mp.cpu_count() > 2:
+                num_processes = mp.cpu_count() - 2
+            else:
+                num_processes = 1
+        
+        if initial_hitrate == None:
+
+            initial_result = self.create_recurrence_matrix(eps)
+            initial_hitrate = np.sum(initial_result.matrix)/np.size(initial_result.matrix)
+            if verbose:
+                print(f'Initial hitrate is {initial_hitrate:.4f}')
+        
+        if np.abs(initial_hitrate - target_density) <= tolerance:
+            if verbose:
+                print('Initial hitrate is within the tolerance window!')
+            results = {'Epsilon':eps,'Output':initial_result}
+            return results
+        else:
+            if verbose:
+                print('Initial hitrate is not within the tolerance window, searching...')
+            hitrate = initial_hitrate
+            flag = True
+
+        if parallelize:
+
+            while flag:
+
+                with mp.Pool(num_processes) as pool:
+                    
+                    eps_range, flag = range_finder(eps,hitrate,target_density,tolerance,num_processes,amp,verbose)
+                    
+                    if flag is False:
+                        
+                        eps = eps_range
+                        results = {'Epsilon':eps,'Output':self.create_recurrence_matrix(eps)}
+                        return results
+
+                    r = pool.starmap(self.create_recurrence_matrix, zip(eps_range))
+                    
+                    pool.close()
+                    pool.join()
+
+                for item in r:
+                    matrix = item.matrix
+                    new_eps = item.epsilon
+                    new_hitrate = np.sum(matrix)/np.size(matrix)
+
+                    if np.abs(new_hitrate - .05) < np.abs(hitrate -.05):
+                        hitrate = new_hitrate
+                        eps = new_eps
+        
+        else:
+
+            while flag:
+            
+                eps_range, flag = range_finder(eps,hitrate,target_density,tolerance,num_processes,amp,verbose)
+
+                if flag is False:
+                        
+                        eps = eps_range
+                        results = {'Epsilon':eps,'Output':self.create_recurrence_matrix(eps)}
+                        return results
+                
+                for eps in eps_range:
+
+                    item = self.create_recurrence_matrix(eps)
+                    matrix = item.matrix
+                    new_eps = item.epsilon
+                    new_hitrate = np.sum(matrix)/np.size(matrix)
+
+                    if np.abs(new_hitrate - .05) < np.abs(hitrate -.05):
+                        hitrate = new_hitrate
+                        eps = new_eps
+        
+        return results
+

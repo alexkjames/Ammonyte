@@ -7,14 +7,17 @@ import matplotlib.pyplot as plt
 
 from ..utils.fisher import fisher_information,smooth_series
 from ..utils.plotting import get_labels
+from ..core.rqa_res import RQA_Res
 
 class RecurrenceMatrix:
     '''Recurrence matrix object. Used for Recurrence Quantification Analysis (RQA).
     '''
-    def __init__(self,matrix,time,epsilon,series = None,value_name=None,value_unit=None,time_name=None,time_unit=None,label=None):
+    def __init__(self,matrix,time,epsilon,m,tau,series = None,value_name=None,value_unit=None,time_name=None,time_unit=None,label=None):
         self.matrix = matrix
         self.time = time
         self.epsilon = epsilon
+        self.m = m
+        self.tau  =tau
         self.series = series
         self.value_name = value_name
         self.value_unit = value_unit
@@ -62,7 +65,19 @@ class RecurrenceMatrix:
         for idx, i in enumerate(self.time):
             eig_data.append([i,eigvec[idx,1],eigvec[idx,2],eigvec[idx,3],eigvec[idx,4]])
             
-        FI_series = fisher_information(eig_data,w_size,w_incre)
+        time,value = fisher_information(eig_data,w_size,w_incre)
+        
+        FI_series = RQA_Res(time,
+                            value,
+                            time_name=self.time_name,
+                            time_unit=self.time_unit,
+                            value_name=self.value_name,
+                            value_unit=self.value_unit,
+                            label=self.label,
+                            m=self.m,
+                            tau=self.tau,
+                            eps=self.epsilon
+                            )
 
         if smooth is True:
             if block_size is None:

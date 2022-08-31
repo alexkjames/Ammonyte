@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import warnings
+import itertools
+
 import pyleoclim as pyleo
 import numpy as np
 
@@ -9,7 +15,9 @@ from pyrqa.neighbourhood import FixedRadius
 from pyrqa.metric import EuclideanMetric
 from pyrqa.computation import RQAComputation
 
+from ..core.rqa_res import RQA_Res
 from ..core.time_embedded_series import TimeEmbeddedSeries
+from ..core.recurrence_matrix import RecurrenceMatrix
 from ..utils.parameters import tau_search
 
 class Series(pyleo.Series):
@@ -36,7 +44,7 @@ class Series(pyleo.Series):
         
         manifold = np.ndarray(shape = (len(values)-(m*tau),m))
 
-        for idx, i in enumerate(values):
+        for idx, _ in enumerate(values):
             if idx < (len(values)-(m*tau)):
                 manifold[idx] = values[idx:idx+(m*tau):tau]
 
@@ -47,7 +55,7 @@ class Series(pyleo.Series):
             self,m,tau,embedded_data,embedded_time,value_name,value_unit,time_name,
             time_unit,label)
 
-    def determinism(self,window_size,overlap,m,tau,radius):
+    def determinism(self,window_size,overlap,m,tau,eps):
         '''Calculate determinism of a series
 
         Note that series must be evenly spaced for this method.
@@ -70,7 +78,7 @@ class Series(pyleo.Series):
         tau : int
             Time delay to use when performing time delay embedding
             
-        radius : float
+        eps : float
             Size of radius to use to calculate recurrence matrix
 
         Returns
@@ -101,7 +109,7 @@ class Series(pyleo.Series):
 
             settings = Settings(ts,
                                 analysis_type=Classic,
-                                neighbourhood=FixedRadius(radius),
+                                neighbourhood=FixedRadius(eps),
                                 similarity_measure=EuclideanMetric)
 
             computation = RQAComputation.create(settings,
@@ -113,15 +121,20 @@ class Series(pyleo.Series):
 
             res.append(result.determinism)
 
-        det_series = pyleo.Series(window_time,res,
-                            time_name=series.time_name,
-                            time_unit=series.time_unit,
-                            value_name='DET',
-                            label=series.label)
+        det_series = RQA_Res(
+            time = window_time,
+            value = res,
+            time_name=series.time_name,
+            time_unit=series.time_unit,
+            value_name='DET',
+            label=series.label,
+            m = m,
+            tau = tau,
+            eps = eps)
 
         return det_series
 
-    def laminarity(self,window_size,overlap,m,tau,radius):
+    def laminarity(self,window_size,overlap,m,tau,eps):
         '''Calculate laminarity of a series
 
         Note that series must be evenly spaced for this method.
@@ -144,7 +157,7 @@ class Series(pyleo.Series):
         tau : int
             Time delay to use when performing time delay embedding
             
-        radius : float
+        eps : float
             Size of radius to use to calculate recurrence matrix
 
         Returns
@@ -175,7 +188,7 @@ class Series(pyleo.Series):
 
             settings = Settings(ts,
                                 analysis_type=Classic,
-                                neighbourhood=FixedRadius(radius),
+                                neighbourhood=FixedRadius(eps),
                                 similarity_measure=EuclideanMetric)
 
             computation = RQAComputation.create(settings,
@@ -187,11 +200,16 @@ class Series(pyleo.Series):
 
             res.append(result.laminarity)
 
-        lam_series = pyleo.Series(window_time,res,
-                            time_name=series.time_name,
-                            time_unit=series.time_unit,
-                            value_name='LAM',
-                            label=series.label)
+        lam_series = RQA_Res(
+            time=window_time,
+            value=res,
+            time_name=series.time_name,
+            time_unit=series.time_unit,
+            value_name='LAM',
+            label=series.label,
+            m = m,
+            tau = tau,
+            eps = eps)
         
         return lam_series
 

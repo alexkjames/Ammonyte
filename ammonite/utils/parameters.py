@@ -1,14 +1,17 @@
-import pyinform
-
-import pyleoclim as pyleo
 import multiprocessing as mp
+import itertools
+import pyleoclim as pyleo
 import numpy as np
 
-from scipy.signal import argrelextrema
-from itertools import repeat
+import pyinform
 
-from ammonite.utils.rm import rm
-from ammonite.utils.range_finder import range_finder
+from scipy.signal import argrelextrema
+from tqdm import tqdm
+
+from ..utils.rm import rm
+from ..utils.range_finder import range_finder
+# from ..core.time_embedded_series import TimeEmbeddedSeries
+
 
 __all__ = [
     'tau_search',
@@ -65,7 +68,7 @@ def tau_search(series,num_lags=30,return_MI = False):
     else:
         return best_tau
 
-def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initial_hitrate = None, num_processes = None):
+def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initial_hitrate = None, num_processes = None,verbose = True):
     '''Tool to find epsilon value tuned for specific target density in recurrence matrix
     
     Parameters
@@ -73,22 +76,33 @@ def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initi
     
     series : pyleoclim.series object (pandas.series support incoming)
         Timeseries used to create recurrence matrix
+
     eps : float
         Starting epsilon value (best guess)
+
     m : int
         Embedding parameter for time delay embedding
+
     tau : int
         Delay parameter for time delay embedding
+
     target_density : float
         Desired recurrence matrix hitrate
+
     tolerance : float
         Amount of allowable difference between target hitrate and actual hitrate
+
     initial_hitrate : float
         If you've already calculated the initial hitrate for your settings you can pass it here to save computation time
+
     num_processes : int
         Number of processes to run, automatically set to your cpu count
+
     amp : int
         The amplitude of the range of epsilon value search. Higher values cover ground quickly but converge slowly, the opposite is true for lower values
+        
+    verbose : bool; {True,False}
+        Whether or not to print output after each iteration
     '''
     
     if num_processes is None:
@@ -98,17 +112,20 @@ def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initi
             num_processes = 1
     
     if initial_hitrate == None:
-        print(f'Finding initial hitrate from given epsilon value: {eps}')
+
         initial_result = rm(series, eps, m, tau)
         initial_hitrate = np.sum(initial_result['rm'])/np.size(initial_result['rm'])
-        print(f'Initial hitrate is {initial_hitrate:.4f}')
+        if verbose:
+            print(f'Initial hitrate is {initial_hitrate:.4f}')
     
     if np.abs(initial_hitrate - target_density) <= tolerance:
-        print('Initial hitrate is within the tolerance window!')
+        if verbose:
+            print('Initial hitrate is within the tolerance window!')
         results = {'Epsilon':eps,'Output':initial_result}
         return results
     else:
-        print('Initial hitrate is not within the tolerance window, searching...')
+        if verbose:
+            print('Initial hitrate is not within the tolerance window, searching...')
         hitrate = initial_hitrate
         flag = True
 
@@ -116,7 +133,7 @@ def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initi
 
         with mp.Pool(num_processes) as pool:
             
-            eps_range, flag = range_finder(eps,hitrate,target_density,tolerance,num_processes,amp)
+            eps_range, flag = range_finder(eps,hitrate,target_density,tolerance,num_processes,amp,verbose)
             
             if flag == False:
                 
@@ -124,7 +141,7 @@ def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initi
                 results = {'Epsilon':eps,'Output':rm(series, eps, m, tau)}
                 return results
             
-            r = pool.starmap(rm, zip(repeat(series), eps_range, repeat(m), repeat(tau)))
+            r = pool.starmap(rm, zip(itertools.repeat(series), eps_range, itertools.repeat(m), itertools.repeat(tau)))
             
             pool.close()
             pool.join()
@@ -143,3 +160,49 @@ def eps_search(series, m, tau ,target_density, tolerance, eps=1, amp = 15, initi
             continue
     
     return results
+
+# def grid_search(series, method, parameter_dict):
+#     '''Function to apply a method with large number of parameters. Returns a collection of series objects with their associated parameters
+    
+#     Parameters
+#     ----------
+    
+#     series : pyleoclim.Series or ammonite.Series
+#         Series to apply grid_search to
+        
+#     method : str
+#         Method to apply. Current options include:
+        
+#         - laplacian_eigenmaps
+#         - determinism
+#         - laminarity
+
+#     parameter_dict : dict
+#         Dictionary of parameters to apply. Parameters should be included as keys with lists or arrays of parameter values as values
+
+#     Returns
+#     -------
+
+#     res : list
+#         List of ammonite.RQA_Res objects
+        
+#     '''
+
+#     if method == 'laplacian_eigenmaps':
+#         keys, values = zip(*parameter_dict.items())
+#         permutations_dicts = [dict(zip(keys, v)) for v in itertools.product(*values)]   
+
+#         series_list = []
+
+#         for permutation in tqdm(permutations_dicts):
+#             series = series.bin(bin_size=permutation['bin_size']).detrend()
+#             series_td = TimeEmbeddedSeries(series,permutation['m'],permutation['tau'])
+
+#             if eps not in permutation:
+#                 eps = series_td.find_epsilon(.05,.01,search_kwargs={'amp':50},verbose=False)
+
+#             series_rm = series_td.create_recurrence_matrix(eps['Epsilon'])
+#             lp_series = series_rm.laplacian_eigenmaps(50,5,smooth=False)
+#             series_list.append(lp_series)
+
+#         return series_list

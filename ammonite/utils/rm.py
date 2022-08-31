@@ -25,12 +25,8 @@ def rm(series, eps, m, delay):
         Delay parameter for time embedding
     '''
     
-    if isinstance(series,pyleo.core.Series):
-        values = series.value
-        time_axis = series.time[:-(m-1)*delay]
-    elif isinstance(series,pd.Series):
-        values = series.values
-        time_axis = list(series.index)[:-(m-1)*delay]
+    values = series.value
+    time_axis = series.time[:-(m-1)*delay]
         
     ts = TimeSeries(values,
                     embedding_dimension = m,
