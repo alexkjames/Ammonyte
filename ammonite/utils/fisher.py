@@ -163,12 +163,14 @@ def smooth_series(series,block_size):
     block_size : int
         Size of each block, assumes an evenly spaced series'''
     
+    #There is definitely a better way to do this, will fix in the future
+    
     values = series.value
     
     smoothed_values=[]
    
     for i in range(block_size,len(values)+block_size,block_size):
-        for j in range(i-block_size,i):
+        for _ in range(i-block_size,i):
             smoothed_values.append(float(sum(values[i-block_size:i]))/len(values[i-block_size:i]))
             
     smoothed_values=smoothed_values[0:len(values)]

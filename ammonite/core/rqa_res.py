@@ -7,8 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from ..utils.sampling import confidence_interval
+from ..utils.fisher import smooth_series
 
-class RQA_Res(pyleo.Series):
+class RQARes(pyleo.Series):
     '''Class for storing the result of various RQA techniques'''
 
     def __init__(self, time, value, time_name=None, time_unit=None, value_name=None, value_unit=None, label=None, m=None,tau=None,eps=None):
@@ -16,6 +17,34 @@ class RQA_Res(pyleo.Series):
         self.m = m
         self.tau = tau
         self.eps = eps
+
+    def smooth(self,block_size):
+        '''Function to perform block smoothing on your RQA result
+        
+        Parameters
+        ----------
+        
+        block_size : int
+            Number of points to include in each block
+            
+        Returns
+        -------
+        
+        smoothed_series : ammonite.RQA_Res
+            Smoothed version of your original RQA_Res object
+            
+        See also
+        --------
+        
+        ammonite.utils.fisher.smooth_series'''
+
+        if block_size is None:
+            block_size = int(len(self.time)/15)
+            smoothed_series = smooth_series(self,block_size)
+        else:
+            smoothed_series = smooth_series(self,block_size)
+
+        return smoothed_series
 
     def confidence_fill_plot(self,ax=None,line_color=None,fill_color=None,fill_alpha=None,transition_interval=None,xlabel=None,ylabel=None,marker=None,
                      markersize=None,linestyle=None,linewidth=None,alpha=None,label=None,title=None,zorder=None,plot_kwargs=None,ci_kwargs=None,

@@ -15,7 +15,7 @@ from pyrqa.neighbourhood import FixedRadius
 from pyrqa.metric import EuclideanMetric
 from pyrqa.computation import RQAComputation
 
-from ..core.rqa_res import RQA_Res
+from ..core.rqa_res import RQARes
 from ..core.time_embedded_series import TimeEmbeddedSeries
 from ..core.recurrence_matrix import RecurrenceMatrix
 from ..utils.parameters import tau_search
@@ -121,7 +121,7 @@ class Series(pyleo.Series):
 
             res.append(result.determinism)
 
-        det_series = RQA_Res(
+        det_series = RQARes(
             time = window_time,
             value = res,
             time_name=series.time_name,
@@ -200,7 +200,7 @@ class Series(pyleo.Series):
 
             res.append(result.laminarity)
 
-        lam_series = RQA_Res(
+        lam_series = RQARes(
             time=window_time,
             value=res,
             time_name=series.time_name,

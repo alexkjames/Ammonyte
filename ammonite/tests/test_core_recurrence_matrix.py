@@ -23,16 +23,12 @@ def load_data():
     return d
 
 class TestCoreRecurrenceMatrixLaplacianEigenmaps:
-    '''Tests for laplacian eigenmaps
-    '''
+    '''Tests for laplacian eigenmaps function'''
 
     #@pytest.mark.parametrize('smooth',['True','False'])
-    def test_laplacian_eigenmaps_t0(self,smooth=True):
+    def test_laplacian_eigenmaps_t0(self):
         d = load_data()
         sst = d.to_LipdSeries(number=5)
-
         td_sst = amt.TimeEmbeddedSeries(sst,m=3,tau=3)
-
         rm_sst = td_sst.create_recurrence_matrix(1) 
-
-        lp_sst = rm_sst.laplacian_eigenmaps(w_size=50,w_incre=5,smooth=smooth)
+        lp_sst = rm_sst.laplacian_eigenmaps(w_size=50,w_incre=5,)

@@ -5,9 +5,9 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 
-from ..utils.fisher import fisher_information,smooth_series
+from ..utils.fisher import fisher_information
 from ..utils.plotting import get_labels
-from ..core.rqa_res import RQA_Res
+from ..core.rqa_res import RQARes
 
 class RecurrenceMatrix:
     '''Recurrence matrix object. Used for Recurrence Quantification Analysis (RQA).
@@ -25,7 +25,7 @@ class RecurrenceMatrix:
         self.time_unit = time_unit
         self.label = label
 
-    def laplacian_eigenmaps(self,w_size, w_incre,smooth=True,block_size=None):
+    def laplacian_eigenmaps(self,w_size, w_incre):
         '''Function to run regime change detection workflow
         
         Parameters
@@ -36,12 +36,6 @@ class RecurrenceMatrix:
         
         w_incre : int 
             Window increment for the fisher information 
-
-        smooth : bool; {True, False}
-            Whether or not to smooth the resulting fisher information series (recommended)
-
-        block_size : int
-            Number of time points to group together for smoothing
 
         Returns
         -------
@@ -67,7 +61,7 @@ class RecurrenceMatrix:
             
         time,value = fisher_information(eig_data,w_size,w_incre)
         
-        FI_series = RQA_Res(time,
+        FI_series = RQARes(time,
                             value,
                             time_name=self.time_name,
                             time_unit=self.time_unit,
@@ -78,13 +72,6 @@ class RecurrenceMatrix:
                             tau=self.tau,
                             eps=self.epsilon
                             )
-
-        if smooth is True:
-            if block_size is None:
-                block_size = int(len(FI_series.time)/15)
-                FI_series = smooth_series(FI_series,block_size)
-            else:
-                FI_series = smooth_series(FI_series,block_size)
         
         return FI_series
 
