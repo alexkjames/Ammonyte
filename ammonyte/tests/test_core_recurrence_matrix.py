@@ -16,19 +16,28 @@ Notes on how to test:
 import pytest
 import pyleoclim as pyleo
 import ammonyte as amt
+import numpy as np
 
 def load_data():
     #Loads stott MD982176 record
     d = pyleo.Lipd('../example_data/MD982176.Stott.2004.lpd')
     return d
 
+def gen_normal(loc=0, scale=1, nt=100):
+    ''' Generate random data with a Gaussian distribution
+    '''
+    t = np.arange(nt)
+    np.random.seed(42)
+    v = np.random.normal(loc=loc, scale=scale, size=nt)
+    ts = amt.Series(t,v)
+    return ts
+
 class TestCoreRecurrenceMatrixLaplacianEigenmaps:
     '''Tests for laplacian eigenmaps function'''
 
     #@pytest.mark.parametrize('smooth',['True','False'])
     def test_laplacian_eigenmaps_t0(self):
-        d = load_data()
-        sst = d.to_LipdSeries(number=5)
-        td_sst = amt.TimeEmbeddedSeries(sst,m=3,tau=3)
+        ts_normal = gen_normal()
+        td_sst = ts_normal.embed(3,1)
         rm_sst = td_sst.create_recurrence_matrix(1) 
-        lp_sst = rm_sst.laplacian_eigenmaps(w_size=50,w_incre=5,)
+        rm_sst.laplacian_eigenmaps(w_size=50,w_incre=5,)

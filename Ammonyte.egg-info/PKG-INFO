@@ -7,7 +7,6 @@ Author: Alexander James
 Author-email: akjames@usc.edu
 License: GPL-3.0 License
 Keywords: Paleoclimate, Data Analysis, Nonlinear
-Platform: UNKNOWN
 Requires-Python: >=3.8.0
 Description-Content-Type: text/markdown
 License-File: LICENSE
@@ -27,4 +26,3 @@ Things to note:
 * This function has only been tested on macOS/Unix based operating systems, so if you encounter errors they may be system specific.
 
 * Raising issues/feature requests is appreciated but there is no guarantee they'll be addressed hastily at this stage of the package's development as we are focused on building core features that are of use to our lab.
-

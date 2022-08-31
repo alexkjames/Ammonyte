@@ -1,1 +1,1 @@
-ammonite
+ammonyte
