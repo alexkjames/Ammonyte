@@ -16,11 +16,21 @@ Notes on how to test:
 import pytest
 import pyleoclim as pyleo
 import ammonite as amt
+import numpy as np
 
 def load_data():
     #Loads stott MD982176 record
     d = pyleo.Lipd('../example_data/MD982176.Stott.2004.lpd')
     return d
+
+def gen_normal(loc=0, scale=1, nt=100):
+    ''' Generate random data with a Gaussian distribution
+    '''
+    t = np.arange(nt)
+    np.random.seed(42)
+    v = np.random.normal(loc=loc, scale=scale, size=nt)
+    ts = amt.Series(t,v)
+    return ts
 
 class TestCoreTimeEmbeddSeriesCreateRecurrenceMatrix:
     '''Tests for create_recurrence_matrix
@@ -28,12 +38,11 @@ class TestCoreTimeEmbeddSeriesCreateRecurrenceMatrix:
 
     @pytest.mark.parametrize('m,tau',[(3,3)])
     def test_create_recurrence_matrix_t0(self,m,tau):
-        d = load_data()
-        sst = d.to_LipdSeries(number=5)
+        ts_normal = gen_normal()
 
-        td_sst = amt.TimeEmbeddedSeries(sst,m,tau)
+        td_sst = ts_normal.embed(m,tau)
 
-        rm_sst = td_sst.create_recurrence_matrix(1)
+        td_sst.create_recurrence_matrix(1)
 
 class TestCoreTimeEmbeddSeriesCreateRecurrenceNetwork:
     '''Tests for create_recurrence_network
@@ -41,9 +50,8 @@ class TestCoreTimeEmbeddSeriesCreateRecurrenceNetwork:
 
     @pytest.mark.parametrize('m,tau',[(3,3)])
     def test_create_recurrence_network_t0(self,m,tau):
-        d = load_data()
-        sst = d.to_LipdSeries(number=5)
+        ts_normal = gen_normal()
 
-        td_sst = amt.TimeEmbeddedSeries(sst,m,tau)
+        td_sst = ts_normal.embed(m,tau)
 
-        rm_sst = td_sst.create_recurrence_network(1)
+        td_sst.create_recurrence_network(1)
