@@ -18,7 +18,7 @@ class RQA_Res(pyleo.Series):
         self.eps = eps
 
     def confidence_fill_plot(self,ax=None,line_color=None,fill_color=None,fill_alpha=None,transition_interval=None,xlabel=None,ylabel=None,marker=None,
-                     markersize=None,linestyle=None,linewidth=None,alpha=None,label=None,zorder=None,plot_kwargs=None,ci_kwargs=None,
+                     markersize=None,linestyle=None,linewidth=None,alpha=None,label=None,title=None,zorder=None,plot_kwargs=None,ci_kwargs=None,
                      background_series=None,background_kwargs=None,legend=True,lgd_kwargs=None):
 
         '''Function for plotting rqa results with confidence bounds
@@ -199,7 +199,7 @@ class RQA_Res(pyleo.Series):
         if zorder is not None:
             plot_kwargs.update({'zorder': zorder})
 
-        series.plot(ax=ax,color=line_color,xlabel=xlabel,ylabel=ylabel,plot_kwargs=plot_kwargs,lgd_kwargs=lgd_kwargs,legend=legend)
+        series.plot(ax=ax,color=line_color,xlabel=xlabel,ylabel=ylabel,title=title,plot_kwargs=plot_kwargs,lgd_kwargs=lgd_kwargs,legend=legend)
             
         ufill_values = np.zeros(len(time)) + upper
         lfill_values = np.zeros(len(time)) + lower
@@ -343,38 +343,28 @@ class RQA_Res(pyleo.Series):
             label = self.label
 
         if marker is None:
-            marker = 'o'
+            marker = 'x'
         
         if color is None:
-            color = sns.color_palette('colorblind')[0]
+            color = sns.color_palette('colorblind')[2]
 
         if size is None:
-            size = 1
+            size = 30
 
         ax.scatter(self.time[idx_fill],self.value[idx_fill],label=label,marker=marker,s=size,c=color,
                     **scatter_kwargs)
 
-        ax.axhline(max(transition_interval),min(self.time),max(self.time))
-        ax.axhline(min(transition_interval),min(self.time),max(self.time))
+        ax.axhline(max(transition_interval),0,1,color=color)
+        ax.axhline(min(transition_interval),0,1,color=color)
 
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
         ax.set_title(title)
 
         if legend:
-            ax.legend()
+            ax.legend(**lgd_kwargs)
 
         if 'fig' in locals():
             return fig, ax
         else:
             return ax
-
-    # def ci_scatter_plot(self):
-    #     '''Function to create a scatter plot with a confidence interval
-        
-    #     Parameters
-    #     ----------
-    #     '''
-    #     fig,ax = bootstrap_scatter_plot(self)
-
-    #     return fig, ax
