@@ -13,7 +13,6 @@ ammonyte/core/recurrence_matrix.py
 ammonyte/core/recurrence_network.py
 ammonyte/core/rqa_res.py
 ammonyte/core/series.py
-ammonyte/core/testing.py
 ammonyte/core/time_embedded_series.py
 ammonyte/tests/__init__.py
 ammonyte/tests/test_core_recurrence_matrix.py
