@@ -4,6 +4,15 @@ Python package designed for conducting non-linear time series analysis of paleoc
 
 Much of Ammonyte's capability is enabled by [PyRQA](https://pypi.org/project/PyRQA/), a tool designed to conduct recurrence analysis in a massively parallel manner. Many of our functions are essentially wrappers around PyRQA functions, so we recommend looking into that package if you're curious about the bones of how recurrence analysis is done in Ammonyte.
 
+## Install instructions:
+
+1) It's recommended you create a new environment using anaconda before installing.
+
+2) Inside your environment install cartopy with the command `conda install -c conda-forge cartopy`
+
+3) Run `pip install ammonyte`
+
+
 Things to note:
 
 * Current releases of Ammonyte are highly experimental. These are mainly done to facilitate our research, though others are welcome to use the functionality. Just be aware that the package is currently subject to constant change and will remain unstable for some time.
