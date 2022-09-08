@@ -55,3 +55,13 @@ class TestCoreTimeEmbeddSeriesCreateRecurrenceNetwork:
         td_sst = ts_normal.embed(m,tau)
 
         td_sst.create_recurrence_network(1)
+
+class TestCoreTimeEmbeddSeriesFindEpsiilon:
+    '''Tests for find_epsilon
+    '''
+    def test_find_eps_t0(self):
+        ts_normal = gen_normal()
+
+        td_sst = ts_normal.embed(3,1)
+
+        td_sst.find_epsilon(1)
