@@ -173,7 +173,7 @@ class TimeEmbeddedSeries:
                                 value_name=self.value_name,value_unit=self.value_unit,time_name=self.time_name,
                                 time_unit=self.time_unit,label=self.label)
 
-    def find_epsilon(self,eps,target_density=.05,tolerance=.01,initial_density=None,parallelize=True,num_processes=None,amp=10,verbose=True):
+    def find_epsilon(self,eps,target_density=.05,tolerance=.01,initial_hitrate=None,parallelize=True,num_processes=None,amp=10,verbose=True):
         '''Function to find epsilon value given target recurrence matrix density
         
         Parameters
@@ -183,13 +183,13 @@ class TimeEmbeddedSeries:
             Starting epsilon value (best guess)
 
         target_density : float
-            Desired recurrence matrix density
+            Desired recurrence matrix hitrate
 
         tolerance : float
-            Amount of allowable difference between target density and actual density
+            Amount of allowable difference between target hitrate and actual hitrate
 
-        initial_density : float
-            If you've already calculated the initial density for your settings you can pass it here to save computation time
+        initial_hitrate : float
+            If you've already calculated the initial hitrate for your settings you can pass it here to save computation time
 
         parallelize : bool; {True,False}
             Whether or not to parallelize the search process. Currently only tested on macOS, could be issues running this on Windows.
@@ -221,45 +221,36 @@ class TimeEmbeddedSeries:
             else:
                 num_processes = 1
         
-        if initial_density == None:
+        if initial_hitrate == None:
 
             initial_result = self.create_recurrence_matrix(eps)
-            initial_density = np.sum(initial_result.matrix)/np.size(initial_result.matrix)
-
+            initial_hitrate = np.sum(initial_result.matrix)/np.size(initial_result.matrix)
             if verbose:
-                print(f'Initial density is {initial_density:.4f}')
+                print(f'Initial hitrate is {initial_hitrate:.4f}')
         
-        if np.abs(initial_density - target_density) <= tolerance:
-
+        if np.abs(initial_hitrate - target_density) <= tolerance:
             if verbose:
-                print('Initial density is within the tolerance window!')
-
+                print('Initial hitrate is within the tolerance window!')
             results = {'Epsilon':eps,'Output':initial_result}
-
             return results
         else:
             if verbose:
-                print('Initial density is not within the tolerance window, searching...')
-            density = initial_density
+                print('Initial hitrate is not within the tolerance window, searching...')
+            hitrate = initial_hitrate
+            flag = True
 
         if parallelize:
 
-            while True:
+            while flag:
 
                 with mp.Pool(num_processes) as pool:
                     
-                    eps_range, flag = range_finder(eps,density,target_density,tolerance,num_processes,amp,verbose)
+                    eps_range, flag = range_finder(eps,hitrate,target_density,tolerance,num_processes,amp,verbose)
                     
-                    if flag is True:
+                    if flag is False:
                         
                         eps = eps_range
                         results = {'Epsilon':eps,'Output':self.create_recurrence_matrix(eps)}
-
-                        if verbose:
-                            matrix = results['Output'].matrix
-                            density = np.sum(matrix)/np.size(matrix)
-                            print(f'Epsilon: {eps:.4f}, Density: {density:.4f}.')
-
                         return results
 
                     r = pool.starmap(self.create_recurrence_matrix, zip(eps_range))
@@ -270,53 +261,34 @@ class TimeEmbeddedSeries:
                 for item in r:
                     matrix = item.matrix
                     new_eps = item.epsilon
-                    new_density = np.sum(matrix)/np.size(matrix)
+                    new_hitrate = np.sum(matrix)/np.size(matrix)
 
-                    if np.abs(new_density - .05) < np.abs(density -.05):
-                        density = new_density
+                    if np.abs(new_hitrate - .05) < np.abs(hitrate -.05):
+                        hitrate = new_hitrate
                         eps = new_eps
-
-                if verbose:
-        
-                    print(f'Epsilon: {eps:.4f}, Density: {density:.4f}.')
         
         else:
-            modifier=1
-            while True:
 
-                distance = target_density-density
+            while flag:
+            
+                eps_range, flag = range_finder(eps,hitrate,target_density,tolerance,num_processes,amp,verbose)
 
-                if distance <= tolerance:
+                if flag is False:
                         
                         eps = eps_range
                         results = {'Epsilon':eps,'Output':self.create_recurrence_matrix(eps)}
-
-                        if verbose:
-                            matrix = results['Output'].matrix
-                            density = np.sum(matrix)/np.size(matrix)
-                            print(f'Epsilon: {eps:.4f}, Density: {density:.4f}.')
-
                         return results
-
-                new_eps = eps+(amp*distance*modifier)
-                trial = self.create_recurrence_matrix(new_eps)
-                matrix = trial.matrix
-                new_eps = trial.epsilon
-                new_density = np.sum(matrix)/np.size(matrix)
-                new_distance = target_density - new_density
-
-                if np.abs(new_distance) <= np.abs(distance):
-                    density = new_density
-                    eps = new_eps
-                    modifier=1
-
-                elif np.abs(new_distance) > np.abs(distance):
-                    modifier /= 2
                 
+                for eps in eps_range:
 
+                    item = self.create_recurrence_matrix(eps)
+                    matrix = item.matrix
+                    new_eps = item.epsilon
+                    new_hitrate = np.sum(matrix)/np.size(matrix)
 
-                if verbose:
+                    if np.abs(new_hitrate - .05) < np.abs(hitrate -.05):
+                        hitrate = new_hitrate
+                        eps = new_eps
         
-                    print(f'Epsilon: {eps:.4f}, Density: {density:.4f}.')
-            
+        return results
 

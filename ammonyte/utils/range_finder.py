@@ -1,27 +1,46 @@
 import numpy as np
 
-def range_finder(eps, density, target_density, tolerance, num_processes, amp):
+def range_finder(eps, hitrate, target_hitrate, tolerance, num_processes, amp,verbose):
     
-    if density < (target_density - tolerance):
+    if hitrate < (target_hitrate - tolerance):
         
-        miss = target_density - density
-        eps_bounds = (eps, eps + miss*amp)
-        eps_range = np.linspace(min(eps_bounds), max(eps_bounds), num_processes)
-        flag = False
+        miss = target_hitrate - hitrate
 
+        eps_bounds = (eps, eps + miss*amp)
+        
+        eps_range = np.linspace(min(eps_bounds), max(eps_bounds), num_processes)
+
+        if verbose:
+        
+            print(f'Epsilon value is: {eps:.4f}')
+            print(f'Hitrate is {hitrate:.4f}. This is outside of the tolerance window.')
+        
+        flag = True
+        
         return eps_range, flag
     
-    elif density > (target_density + tolerance):
+    elif hitrate > (target_hitrate + tolerance):
         
-        miss = density - target_density
-        eps_bounds = (eps, eps - miss*amp)    
-        eps_range = np.linspace(min(eps_bounds), max(eps_bounds), num_processes)      
-        flag = False
+        miss = hitrate - target_hitrate
+
+        eps_bounds = (eps, eps - miss*amp)
+        
+        eps_range = np.linspace(min(eps_bounds), max(eps_bounds), num_processes)
+        
+        if verbose:
+            print(f'Epsilon value is: {eps:.4f}')
+            print(f'Hitrate is {hitrate:.4f}. This is outside of the tolerance window.')
+            
+        flag = True
         
         return eps_range, flag
         
     else:
+        
+        if verbose:
+            print(f'Epsilon value is: {eps:.4f}')
+            print(f'Hitrate is {hitrate:.4f} which is within the tolerance window')
             
-        flag = True
+        flag = False
         
         return eps, flag
