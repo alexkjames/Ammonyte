@@ -59,9 +59,10 @@ class TestCoreTimeEmbeddSeriesCreateRecurrenceNetwork:
 class TestCoreTimeEmbeddSeriesFindEpsiilon:
     '''Tests for find_epsilon
     '''
-    def test_find_eps_t0(self):
+    @pytest.mark.parametrize('eps',[.1,1])
+    def test_find_eps_t0(self,eps):
         ts_normal = gen_normal()
 
-        td_sst = ts_normal.embed(3,1)
+        td = ts_normal.embed(3,1)
 
-        td_sst.find_epsilon(1)
+        td.find_epsilon(eps,parallelize=False)
