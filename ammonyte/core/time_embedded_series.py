@@ -236,7 +236,7 @@ class TimeEmbeddedSeries:
 
                 with mp.Pool(num_processes) as pool:
                     
-                    eps_range, flag = range_finder(eps,density,target_density,tolerance,num_processes,amp,verbose)
+                    eps_range, flag = range_finder(eps,density,target_density,tolerance,num_processes,amp)
                     
                     if flag is True:
                         
@@ -276,7 +276,6 @@ class TimeEmbeddedSeries:
 
                 if distance <= tolerance:
                         
-                        eps = eps_range
                         results = {'Epsilon':eps,'Output':self.create_recurrence_matrix(eps)}
 
                         if verbose:
@@ -300,8 +299,6 @@ class TimeEmbeddedSeries:
 
                 elif np.abs(new_distance) > np.abs(distance):
                     modifier /= 2
-                
-
 
                 if verbose:
         
