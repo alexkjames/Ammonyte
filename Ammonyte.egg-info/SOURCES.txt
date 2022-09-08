@@ -8,6 +8,12 @@ Ammonyte.egg-info/not-zip-safe
 Ammonyte.egg-info/requires.txt
 Ammonyte.egg-info/top_level.txt
 ammonyte/__init__.py
+ammonyte.egg-info/PKG-INFO
+ammonyte.egg-info/SOURCES.txt
+ammonyte.egg-info/dependency_links.txt
+ammonyte.egg-info/not-zip-safe
+ammonyte.egg-info/requires.txt
+ammonyte.egg-info/top_level.txt
 ammonyte/core/__init__.py
 ammonyte/core/recurrence_matrix.py
 ammonyte/core/recurrence_network.py

@@ -4,14 +4,14 @@ import io
 
 from setuptools import setup, find_packages
 
-version = '0.0.2'
+version = '0.0.3'
 
 # Read the readme file contents into variable
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name='Ammonyte',
+    name='ammonyte',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
