@@ -1,9 +1,8 @@
-build
-debug.log
-benchmark.log
+build/
 __pycache__/
 dist/
 ammonyte.egg-info/
 .*
-!/.gitignore
 *.log
+
+!/.gitignore
