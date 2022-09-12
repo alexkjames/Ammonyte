@@ -1,11 +1,9 @@
-.DS_store
-**/__pycache__/
-.ipynb_checkpoints
 build
-dist/
-ammonyte.egg-info/
-.vscode
-.idea
 debug.log
 benchmark.log
-.pytest_cache
+__pycache__/
+dist/
+ammonyte.egg-info/
+.*
+!/.gitignore
+*.log
