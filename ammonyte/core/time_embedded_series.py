@@ -292,14 +292,13 @@ class TimeEmbeddedSeries:
                 new_density = np.sum(matrix)/np.size(matrix)
                 new_distance = target_density - new_density
 
-                if np.abs(new_distance) <= np.abs(distance):
+                if np.abs(new_distance) < np.abs(distance):
                     density = new_density
                     eps = new_eps
                     modifier=1
 
-                elif np.abs(new_distance) > np.abs(distance):
+                elif (np.abs(new_distance) >= np.abs(distance)):
                     modifier /= 2
 
                 if verbose:
-        
                     print(f'Epsilon: {eps:.4f}, Density: {density:.4f}')
