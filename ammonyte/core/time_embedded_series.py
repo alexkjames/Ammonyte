@@ -300,5 +300,8 @@ class TimeEmbeddedSeries:
                 elif (np.abs(new_distance) >= np.abs(distance)):
                     modifier /= 2
 
+                if modifier < 1e-10:
+                    raise RuntimeError('Runaway operation, exiting.')
+
                 if verbose:
                     print(f'Epsilon: {eps:.4f}, Density: {density:.4f}')
