@@ -269,7 +269,8 @@ class TimeEmbeddedSeries:
                     print(f'Epsilon: {eps:.4f}, Density: {density:.4f}.')
         
         else:
-            modifier=1
+            low_modifier=1
+            high_modifier=1
             while True:
 
                 distance = target_density-density
@@ -285,7 +286,7 @@ class TimeEmbeddedSeries:
 
                         return results
 
-                new_eps = max(0,eps+(amp*distance*modifier))
+                new_eps = max(0,eps+(amp*distance*low_modifier*high_modifier))
                 trial = self.create_recurrence_matrix(new_eps)
                 matrix = trial.matrix
                 new_eps = trial.epsilon
@@ -295,12 +296,13 @@ class TimeEmbeddedSeries:
                 if np.abs(new_distance) < np.abs(distance):
                     density = new_density
                     eps = new_eps
-                    modifier=1
+                    low_modifier=1
+                    high_modifier=1
 
                 elif (np.abs(new_distance) >= np.abs(distance)):
-                    modifier /= 2
+                    low_modifier /= 2
 
-                if modifier < 1e-10:
+                if low_modifier < 1e-10:
                     raise RuntimeError('Runaway operation, exiting.')
 
                 if verbose:

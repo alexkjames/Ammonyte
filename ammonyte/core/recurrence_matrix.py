@@ -65,12 +65,16 @@ class RecurrenceMatrix:
                             value,
                             time_name=self.time_name,
                             time_unit=self.time_unit,
-                            value_name=self.value_name,
-                            value_unit=self.value_unit,
+                            value_name='Fisher Information',
+                            value_unit=None,
                             label=self.label,
                             m=self.m,
                             tau=self.tau,
-                            eps=self.epsilon
+                            eps=self.epsilon,
+                            series=self.series,
+                            eigenmap=eigvec,
+                            w_size = w_size,
+                            w_incre = w_incre
                             )
         
         return FI_series
@@ -131,3 +135,8 @@ class RecurrenceMatrix:
         ax.set_title(title)
 
         ax.imshow(self.matrix,**imshow_kwargs)
+
+        if 'fig' in locals():
+            return fig, ax
+        else:
+            return ax
