@@ -3,8 +3,7 @@ import itertools
 import pyleoclim as pyleo
 import numpy as np
 
-import pyinform
-
+from sklearn.feature_selection import mutual_info_regression
 from scipy.signal import argrelextrema
 from tqdm import tqdm
 
@@ -56,9 +55,9 @@ def tau_search(series,num_lags=30,return_MI = False):
     MI = []
 
     for lag in lags:
-        values = series.value[:-lag] - min(series.value[:-lag])
-        lagged_values = series.value[lag:] - min(series.value[lag:])
-        MI.append(pyinform.mutualinfo.mutual_info(values, lagged_values, local=False))
+        values = series.value[:-lag].reshape(-1, 1)
+        lagged_values = series.value[lag:]
+        MI.append(mutual_info_regression(values, lagged_values))
 
     best_tau = argrelextrema(np.array(MI),np.less)[0][0] + 1
 
