@@ -4,7 +4,7 @@ import io
 
 from setuptools import setup, find_packages
 
-version = '0.0.7'
+version = '0.0.8'
 
 # Read the readme file contents into variable
 def read(fname):
@@ -30,7 +30,7 @@ setup(
         "scipy>=1.7.1",
         "numpy>=1.21.5",
         "PyRQA>=8.0.0",
-        "pyinform>=0.2.0"
+        "sklearn>=1.2.1"
     ],
     python_requires=">=3.8.0"
 )
