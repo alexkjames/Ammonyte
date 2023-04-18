@@ -1,0 +1,11 @@
+cff-version: 0.0.8
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "James"
+    given-names: "Alexander"
+    orcid: "https://orcid.org/0000-0001-8561-3188"
+title: "Ammonyte: A Python package designed for conducting non-linear time series analysis of paleoclimate data."
+version: v0.0.8
+doi: 10.5281/zenodo.7843881
+date-released: 2023-04-18
+url: "https://github.com/alexkjames/Ammonyte"
