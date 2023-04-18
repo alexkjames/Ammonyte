@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/450291131.svg)](https://zenodo.org/badge/latestdoi/450291131)
+
 # Ammonyte
 
 Python package designed for conducting non-linear time series analysis of paleoclimate data. Recommended for usage in tandem with [Pyleoclim](https://github.com/LinkedEarth/Pyleoclim_util). Developed by [Alexander James](https://alexkjames.github.io/) with the [University of Southern California Climate Dynamics Lab Group](https://climdyn.usc.edu/). Currently under heavy construction.
