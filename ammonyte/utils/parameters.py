@@ -59,7 +59,21 @@ def tau_search(series,num_lags=30,return_MI = False):
         lagged_values = series.value[lag:]
         MI.append(mutual_info_regression(values, lagged_values))
 
-    best_tau = argrelextrema(np.array(MI),np.less)[0][0] + 1
+    #Make MI an array
+    MI = np.array(MI)
+
+    #Find minimum values
+    extrema = argrelextrema(MI,np.less)[0]
+
+    try:
+        #If extrema can be identified, use that. If not it means that MI probably went to zero, so pick first instance of zero
+        if len(extrema)>0:
+            best_tau = extrema[0] + 1
+        elif 0 in MI:
+            best_tau = min(np.where(MI==0)[0]) + 1
+    except:
+        print(MI)
+        raise ValueError()
 
     if return_MI is True:
         return best_tau,MI

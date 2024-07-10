@@ -30,12 +30,6 @@ class Series(pyleo.Series):
     def embed(self,m,tau=None,):
         '''Function to time delay a time series'''
 
-        value_name = self.value_name
-        value_unit = self.value_unit
-        time_name = self.time_name
-        time_unit = self.time_unit
-        label = self.label
-
         if tau is None:
             tau = tau_search(self)
 
@@ -52,8 +46,16 @@ class Series(pyleo.Series):
         embedded_time = time_axis
 
         return TimeEmbeddedSeries(
-            self,m,tau,embedded_data,embedded_time,value_name,value_unit,time_name,
-            time_unit,label)
+            series=self,
+            m=m,
+            tau=tau,
+            embedded_data=embedded_data,
+            embedded_time=embedded_time,
+            value_name=self.value_name,
+            value_unit=self.value_unit,
+            time_name=self.time_name,
+            time_unit=self.time_unit,
+            label=self.label)
 
     def determinism(self,window_size,overlap,m,tau,eps):
         '''Calculate determinism of a series

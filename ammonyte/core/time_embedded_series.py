@@ -137,9 +137,18 @@ class TimeEmbeddedSeries:
 
         matrix = result.recurrence_matrix
 
-        return RecurrenceMatrix(matrix=matrix,time=self.embedded_time,epsilon=epsilon,series=self.series, m = self.m, tau = self.tau,
-                                value_name=self.value_name,value_unit=self.value_unit,time_name=self.time_name,
-                                time_unit=self.time_unit,label=self.label)
+        return RecurrenceMatrix(
+            matrix=matrix,
+            time=self.embedded_time,
+            epsilon=epsilon,
+            series=self.series, 
+            m = self.m, 
+            tau = self.tau,
+            value_name=self.value_name,
+            value_unit=self.value_unit,
+            time_name=self.time_name,
+            time_unit=self.time_unit,
+            label=self.label)
 
     def create_recurrence_network(self,epsilon):
         '''Function to create Recurrence Network object
@@ -169,11 +178,18 @@ class TimeEmbeddedSeries:
 
         matrix = result.recurrence_matrix
 
-        return RecurrenceNetwork(matrix=matrix,time=self.embedded_time,epsilon=epsilon,series=self.series,
-                                value_name=self.value_name,value_unit=self.value_unit,time_name=self.time_name,
-                                time_unit=self.time_unit,label=self.label)
+        return RecurrenceNetwork(
+            matrix=matrix,
+            time=self.embedded_time,
+            epsilon=epsilon,
+            series=self.series,
+            value_name=self.value_name,
+            value_unit=self.value_unit,
+            time_name=self.time_name,
+            time_unit=self.time_unit,
+            label=self.label)
 
-    def find_epsilon(self,eps,target_density=.05,tolerance=.01,initial_density=None,parallelize=True,num_processes=None,amp=10,verbose=True):
+    def find_epsilon(self,eps,target_density=.05,tolerance=.01,initial_density=None,parallelize=False,num_processes=None,amp=10,verbose=True):
         '''Function to find epsilon value given target recurrence matrix density
         
         Parameters

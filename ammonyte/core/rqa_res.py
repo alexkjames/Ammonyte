@@ -19,7 +19,15 @@ class RQARes(pyleo.Series):
 
     def __init__(self, time, value, time_name=None, time_unit=None, value_name=None, value_unit=None, series=None,label=None, m=None,
                 tau=None,eps=None,eigenmap=None,w_size=None,w_incre=None):
-        super().__init__(time,value,time_name,time_unit,value_name,value_unit,label)
+        super().__init__(time,value,time_name,time_unit,value_name,value_unit,label,sort_ts=None)
+        self.time=time
+        self.value=value
+        self.time_name=time_name
+        self.time_unit=time_unit
+        self.value_name=value_name
+        self.value_unit=value_unit
+        self.series=series
+        self.label=label
         self.m = m
         self.tau = tau
         self.eps = eps

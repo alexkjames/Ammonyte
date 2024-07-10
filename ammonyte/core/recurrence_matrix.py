@@ -61,8 +61,8 @@ class RecurrenceMatrix:
             
         time,value = fisher_information(eig_data,w_size,w_incre)
         
-        FI_series = RQARes(time,
-                            value,
+        FI_series = RQARes(time=time,
+                            value=value,
                             time_name=self.time_name,
                             time_unit=self.time_unit,
                             value_name='Fisher Information',
@@ -74,7 +74,7 @@ class RecurrenceMatrix:
                             series=self.series,
                             eigenmap=eigvec,
                             w_size = w_size,
-                            w_incre = w_incre
+                            w_incre = w_incre,
                             )
         
         return FI_series
