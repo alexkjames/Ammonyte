@@ -18,11 +18,6 @@ import pyleoclim as pyleo
 import ammonyte as amt
 import numpy as np
 
-def load_data():
-    #Loads stott MD982176 record
-    d = pyleo.Lipd('../example_data/MD982176.Stott.2004.lpd')
-    return d
-
 def gen_normal(loc=0, scale=1, nt=100):
     ''' Generate random data with a Gaussian distribution
     '''

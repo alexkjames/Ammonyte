@@ -74,7 +74,7 @@ class TimeEmbeddedSeries:
 
         if self.embedded_data is None:
 
-            if isinstance(self.series, (pyleo.core.Series, pyleo.core.LipdSeries)):
+            if isinstance(self.series, (pyleo.Series, pyleo.GeoSeries)):
                 values = self.series.value
                 time_axis = self.series.time[:(-self.m*self.tau)]
 

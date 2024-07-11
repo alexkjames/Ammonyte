@@ -28,7 +28,7 @@ class Series(pyleo.Series):
     '''
 
     def embed(self,m,tau=None,):
-        '''Function to time delay a time series'''
+        '''Function to create a time delay embedding from a ammonyte.series object'''
 
         if tau is None:
             tau = tau_search(self)
